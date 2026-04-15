@@ -1,5 +1,19 @@
-export interface FeaturedGameStats {
-    headToHead: string;
+export type TeamBrand = {
+    primary: string;
+    secondary: string;
+    surface: string;
+    ring: string;
+};
+
+export type HomeGameCard = {
+    id: string;
+    time: string;
+    awayTeam: string;
+    homeTeam: string;
+    score: number;
+};
+
+export type FeaturedGameStats = {
     awayLast5: string;
     homeLast5: string;
     awayPpg: string;
@@ -8,46 +22,32 @@ export interface FeaturedGameStats {
     homeOppPpg: string;
     awayWinRate: string;
     homeWinRate: string;
-}
+    headToHead: string;
+};
 
-export interface FeaturedGame {
+export type FeaturedGame = {
     id: string;
+    time: string;
     awayTeam: string;
     homeTeam: string;
-    time: string;
-    score: number;
-    reason: string;
     awayRecord: string;
     homeRecord: string;
-    streak: string;
-    stats: FeaturedGameStats;
-}
-
-export interface HomeGameItem {
-    id: string;
-    awayTeam: string;
-    homeTeam: string;
-    time: string;
     score: number;
-}
+    streak: string;
+    reason: string;
+    stats: FeaturedGameStats;
+};
 
-export interface TeamRankingItem {
+export type TeamRanking = {
     rank: number;
     team: string;
     record: string;
     winRate: string;
-}
+};
 
-export interface ScoringLeaderItem {
+export type ScoringLeader = {
     rank: number;
     name: string;
     team: string;
     ppg: number;
-}
-
-export interface TeamBrand {
-    primary: string;
-    secondary: string;
-    surface: string;
-    ring: string;
-}
+};

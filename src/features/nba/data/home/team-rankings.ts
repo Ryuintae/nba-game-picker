@@ -1,6 +1,6 @@
-import type { TeamRankingItem } from "../../types/home";
+import type { TeamRanking } from "../../types/home";
 
-export const teamRankings: TeamRankingItem[] = [
+export const teamRankings: TeamRanking[] = [
     { rank: 1, team: "Celtics", record: "58-20", winRate: "74.4%" },
     { rank: 2, team: "Bucks", record: "54-24", winRate: "69.2%" },
     { rank: 3, team: "Nuggets", record: "53-25", winRate: "67.9%" },
