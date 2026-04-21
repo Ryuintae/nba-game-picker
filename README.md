@@ -1,36 +1,107 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🏀 NBA Game Picker
 
-## Getting Started
+NBA 경기 데이터를 기반으로  
+**오늘 가장 볼 만한 경기를 추천해주는 웹 서비스**
 
-First, run the development server:
+👉 단순 경기 정보 제공이 아니라  
+👉 **사용자가 “어떤 경기를 볼지 선택”할 수 있도록 설계한 프로젝트입니다.**
+
+---
+
+## 🔗 라이브 데모
+
+👉 https://nba-game-picker.vercel.app
+
+---
+
+## 😀 프로젝트 소개
+
+NBA Game Picker는  
+NBA를 시청하는 과정에서 발생하는 다음과 같은 문제를 해결하기 위해 만들었습니다.
+
+- 오늘 경기 많네… 근데 뭐 보지?
+- 접전 경기 어디지?
+- 득점 많이 나오는 경기 어디지?
+- 단순 일정만으로는 선택이 어려움
+
+기존 스포츠 서비스는 대부분
+
+- 경기 일정
+- 팀 정보
+- 결과
+
+중심으로 구성되어 있지만,  
+실제로 사용자가 원하는 것은
+
+👉 **“오늘 가장 재미있는 경기”를 빠르게 찾는 것**입니다.
+
+이 프로젝트는 이를 해결하기 위해
+
+👉 경기 데이터를 기반으로  
+👉 **추천 중심 UX를 제공하는 서비스**로 설계했습니다.
+
+---
+
+## 🛠 기술 스택
+
+### 프론트엔드
+- Next.js (App Router)
+- TypeScript
+- Tailwind CSS
+
+### 상태 관리 / 데이터 
+- Zustand
+- TanStack Query
+
+### 기타
+- next-themes (다크 / 라이트 모드)
+- PWA
+- Vercel
+
+---
+
+## 🖼 주요 화면
+
+### 🏠 홈 화면
+- 오늘 경기 리스트
+- 추천 경기 (Featured Game)
+- 팀 순위
+- 득점 리더
+
+하나의 화면에서 전체 정보를 빠르게 파악 가능
+
+---
+
+### 📋 경기 목록
+- 오늘 경기 전체 리스트
+- 추천 점수 기준 정렬
+
+“무엇을 볼지” 선택하는 화면
+
+---
+
+### 🔍 경기 상세
+- 매치업 분석
+- 최근 경기 흐름
+- 팀 비교 데이터
+- 관전 포인트
+
+“왜 이 경기가 재밌는지” 설명하는 화면
+
+---
+
+## 🖥 사용 방법
+
+1. 홈에서 오늘 경기 확인
+2. 추천 경기 또는 전체 목록 확인
+3. 관심 있는 경기 선택
+4. 상세 페이지에서 분석 정보 확인
+
+---
+
+## 🖥 실행 방법
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+npm run build
