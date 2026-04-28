@@ -119,13 +119,6 @@ export default function FeaturedGameCard({ game }: FeaturedGameCardProps) {
                         >
                             경기 상세 보기
                         </Link>
-
-                        <Link
-                            href="/about-score"
-                            className="inline-flex items-center justify-center rounded-full border border-black/10 bg-white/55 px-4 py-2.5 text-[13px] font-medium text-neutral-900 transition hover:bg-white/70"
-                        >
-                            점수 기준 보기
-                        </Link>
                     </div>
                 </div>
             </div>
