@@ -1,7 +1,7 @@
 import type { FeaturedGame } from "../../types/home";
 
 export const featuredGame: FeaturedGame = {
-    id: "lal-vs-gsw-2026-04-09",
+    id: "lakers-warriors",
     awayTeam: "Lakers",
     homeTeam: "Warriors",
     time: "오늘 오전 11:00",
