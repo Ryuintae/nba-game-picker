@@ -68,7 +68,7 @@ export default function AboutScorePage() {
                     <div className="flex items-center justify-between gap-3">
                         <div className="min-w-0">
                             <p className="text-[18px] font-semibold tracking-[-0.03em] text-neutral-950 dark:text-white">
-                                About Watchability Score
+                                About Matchup Score
                             </p>
                             <p className="mt-1 text-[12px] text-neutral-500 dark:text-neutral-400">
                                 코트 위에서 보듯이 추천 점수 구조를 한눈에 설명합니다.
@@ -114,7 +114,7 @@ export default function AboutScorePage() {
                                     Court View
                                 </p>
                                 <h1 className="mt-3 text-[30px] font-semibold tracking-[-0.05em] text-neutral-950 dark:text-white sm:text-[42px]">
-                                    Watchability Score를
+                                    Matchup Score를
                                     <br />
                                     농구 코트 위에서 해석하는 방식
                                 </h1>
@@ -193,7 +193,7 @@ export default function AboutScorePage() {
                         </div>
 
                         <div className="rounded-full border border-black/6 bg-[#f7f8fa] px-3 py-1.5 text-[12px] font-medium text-neutral-600 dark:border-white/10 dark:bg-[#1f2937] dark:text-neutral-300">
-                            Watchability Formula
+                            Matchup Formula
                         </div>
                     </div>
 
