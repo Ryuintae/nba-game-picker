@@ -1,15 +1,44 @@
-export function getScoreTone(score: number) {
-    if (score >= 85) {
-        return "border-amber-500/25 bg-amber-500/10 text-amber-700 dark:text-amber-300";
+import type { GameStatus } from "../types/game";
+
+type BasicScoreInput = {
+    homeScore?: number | null;
+    awayScore?: number | null;
+    status: GameStatus;
+};
+
+export function calculateBasicMatchupScore(input: BasicScoreInput): number {
+    if (input.status === "postponed") return 0;
+
+    if (
+        input.homeScore == null ||
+        input.awayScore == null ||
+        input.status === "scheduled"
+    ) {
+        return 72;
     }
 
-    if (score >= 75) {
-        return "border-violet-500/25 bg-violet-500/10 text-violet-700 dark:text-violet-300";
+    const diff = Math.abs(input.homeScore - input.awayScore);
+
+    if (diff <= 3) return 95;
+    if (diff <= 7) return 88;
+    if (diff <= 12) return 78;
+    if (diff <= 20) return 65;
+
+    return 52;
+}
+
+export function getScoreTone(score: number): string {
+    if (score >= 90) {
+        return "text-emerald-400";
     }
 
-    if (score >= 60) {
-        return "border-blue-500/25 bg-blue-500/10 text-blue-700 dark:text-blue-300";
+    if (score >= 80) {
+        return "text-orange-400";
     }
 
-    return "border-neutral-500/20 bg-neutral-500/10 text-neutral-700 dark:text-neutral-300";
+    if (score >= 70) {
+        return "text-yellow-400";
+    }
+
+    return "text-slate-400";
 }
