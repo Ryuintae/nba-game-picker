@@ -10,5 +10,15 @@ export async function getTeamArtworkByAbbr(abbreviation?: string) {
         return null;
     }
 
-    return getTeamArtworkById(teamId);
+    try {
+        return await getTeamArtworkById(teamId);
+    } catch (error) {
+        console.warn("[TheSportsDB] failed to fetch team artwork:", {
+            abbreviation,
+            teamId,
+            error,
+        });
+
+        return null;
+    }
 }
