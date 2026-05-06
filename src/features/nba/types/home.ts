@@ -10,6 +10,8 @@ export type HomeGameCard = {
     time: string;
     awayTeam: string;
     homeTeam: string;
+    awayTeamAbbr: string;
+    homeTeamAbbr: string;
     score: number;
 };
 
@@ -30,6 +32,8 @@ export type FeaturedGame = {
     time: string;
     awayTeam: string;
     homeTeam: string;
+    awayTeamAbbr: string;
+    homeTeamAbbr: string;
     awayRecord: string;
     homeRecord: string;
     score: number;
