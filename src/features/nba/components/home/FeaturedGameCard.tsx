@@ -7,13 +7,13 @@ type FeaturedGameCardProps = {
 };
 
 export default function FeaturedGameCard({ game }: FeaturedGameCardProps) {
-    const awayBrand = getTeamBrand(game.awayTeam);
-    const homeBrand = getTeamBrand(game.homeTeam);
+    const awayBrand = getTeamBrand(game.awayTeamAbbr);
+    const homeBrand = getTeamBrand(game.homeTeamAbbr);
 
     return (
         <div
             className="relative overflow-hidden rounded-[22px] p-5 sm:p-6"
-            style={getMatchupGradient(game.awayTeam, game.homeTeam)}
+            style={getMatchupGradient(game.awayTeamAbbr, game.homeTeamAbbr)}
         >
             <div className="absolute inset-0 bg-white/38" />
             <div

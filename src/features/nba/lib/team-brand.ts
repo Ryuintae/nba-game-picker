@@ -10,21 +10,21 @@ function normalizeTeamName(teamName: string) {
 }
 
 export function getTeamBrand(teamName: string): TeamBrand {
-    const normalized = normalizeTeamName(teamName);
-    const alias = TEAM_NAME_ALIASES[normalized];
+    const normalizedName = normalizeTeamName(teamName);
+    const teamKey = TEAM_NAME_ALIASES[normalizedName] ?? normalizedName;
 
-    if (!alias) {
-        return FALLBACK_TEAM_BRAND;
-    }
-
-    return TEAM_BRAND_MAP[alias] ?? FALLBACK_TEAM_BRAND;
+    return TEAM_BRAND_MAP[teamKey] ?? FALLBACK_TEAM_BRAND;
 }
 
 export function getMatchupGradient(awayTeam: string, homeTeam: string) {
-    const away = getTeamBrand(awayTeam);
-    const home = getTeamBrand(homeTeam);
+    const awayBrand = getTeamBrand(awayTeam);
+    const homeBrand = getTeamBrand(homeTeam);
 
     return {
-        background: `linear-gradient(135deg, ${away.secondary} 0%, ${home.secondary} 100%)`,
+        background: `
+            radial-gradient(circle at 18% 18%, ${awayBrand.secondary} 0%, transparent 30%),
+            radial-gradient(circle at 82% 18%, ${homeBrand.secondary} 0%, transparent 30%),
+            linear-gradient(135deg, ${awayBrand.primary} 0%, ${awayBrand.primary} 34%, ${homeBrand.primary} 100%)
+        `,
     };
 }
