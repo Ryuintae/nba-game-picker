@@ -1,16 +1,12 @@
 import { GamesList } from "@/features/nba/components/games/GamesList";
 import { getTodayGamesWithArtwork } from "@/features/nba/api/get-today-games-with-artwork";
-import { fallbackTodayGames } from "@/features/nba/data/fallback/games";
+import type { GameListItem } from "@/features/nba/types/game";
 
 export default async function GamesPage() {
-    let games = fallbackTodayGames;
+    let games: GameListItem[] = [];
 
     try {
-        const apiGames = await getTodayGamesWithArtwork();
-
-        if (apiGames.length > 0) {
-            games = apiGames;
-        }
+        games = await getTodayGamesWithArtwork();
     } catch (error) {
         console.error("Failed to fetch NBA games:", error);
     }
