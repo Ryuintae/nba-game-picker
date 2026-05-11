@@ -45,13 +45,26 @@ export type FeaturedGame = {
 export type TeamRanking = {
     rank: number;
     team: string;
+    abbreviation?: string;
+    conference?: "east" | "west";
     record: string;
     winRate: string;
+    wins?: number;
+    losses?: number;
+    gamesBehind?: string;
+    logoUrl?: string | null;
+    fanartUrl?: string | null;
 };
 
 export type ScoringLeader = {
     rank: number;
     name: string;
     team: string;
+    position?: string;
+    gamesPlayed?: number;
     ppg: number;
+    apg?: number;
+    rpg?: number;
+    headshotUrl?: string | null;
+    teamLogoUrl?: string | null;
 };
