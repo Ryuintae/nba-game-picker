@@ -5,11 +5,18 @@ import RankingTable from "@/features/nba/components/home/RankingTable";
 import ScoringLeadersTable from "@/features/nba/components/home/ScoringLeadersTable";
 
 import { getTodayGamesWithArtwork } from "@/features/nba/api/get-today-games-with-artwork";
+import { getScoringLeaders } from "@/features/nba/api/espn/get-scoring-leaders";
+import { getTeamStandings } from "@/features/nba/api/espn/get-team-standings";
 import { scoringLeaders } from "@/features/nba/data/home/scoring-leaders";
 import { teamRankings } from "@/features/nba/data/home/team-rankings";
 
 import type { GameListItem } from "@/features/nba/types/game";
-import type { FeaturedGame, HomeGameCard } from "@/features/nba/types/home";
+import type {
+    FeaturedGame,
+    HomeGameCard,
+    ScoringLeader,
+    TeamRanking,
+} from "@/features/nba/types/home";
 
 function mapGameListItemToHomeGameCard(game: GameListItem): HomeGameCard {
 
@@ -66,17 +73,46 @@ function getFeaturedGame(games: GameListItem[]): FeaturedGame | null {
 
 export default async function HomePage() {
     let todayGames: GameListItem[] = [];
+    let standings: TeamRanking[] = teamRankings;
+    let leaders: ScoringLeader[] = scoringLeaders;
 
-    try {
-        todayGames = await getTodayGamesWithArtwork();
-    } catch (error) {
-        console.error("[HomePage] failed to fetch today games:", error);
+    const [todayGamesResult, standingsResult, leadersResult] =
+        await Promise.allSettled([
+            getTodayGamesWithArtwork(),
+            getTeamStandings(),
+            getScoringLeaders(),
+        ]);
+
+    if (todayGamesResult.status === "fulfilled") {
+        todayGames = todayGamesResult.value;
+    } else {
+        console.error(
+            "[HomePage] failed to fetch today games:",
+            todayGamesResult.reason
+        );
+    }
+
+    if (standingsResult.status === "fulfilled") {
+        standings = standingsResult.value;
+    } else {
+        console.error(
+            "[HomePage] failed to fetch team standings:",
+            standingsResult.reason
+        );
+    }
+
+    if (leadersResult.status === "fulfilled") {
+        leaders = leadersResult.value;
+    } else {
+        console.error(
+            "[HomePage] failed to fetch scoring leaders:",
+            leadersResult.reason
+        );
     }
 
     const homeGames = todayGames.map(mapGameListItemToHomeGameCard);
     const featuredGame = getFeaturedGame(todayGames);
-    console.log("[HomePage] todayGames:", todayGames);
-    console.log("[HomePage] featuredGame:", featuredGame);
+
     return (
         <main className="relative min-h-screen overflow-hidden bg-[#f7f3ea] text-neutral-950 dark:bg-[#0b0f17] dark:text-white">
             <div className="pointer-events-none absolute inset-0">
@@ -108,11 +144,11 @@ export default async function HomePage() {
 
                     <div className="grid gap-3">
                         <div id="rankings">
-                            <RankingTable teams={teamRankings} />
+                            <RankingTable teams={standings} />
                         </div>
 
                         <div id="leaders">
-                            <ScoringLeadersTable players={scoringLeaders} />
+                            <ScoringLeadersTable players={leaders} />
                         </div>
                     </div>
                 </section>
