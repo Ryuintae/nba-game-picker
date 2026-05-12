@@ -214,14 +214,14 @@ export default async function HomePage() {
     const featuredGame = await getFeaturedGame(todayGames, standings);
 
     return (
-        <main className="relative min-h-screen overflow-hidden bg-[#f7f3ea] text-neutral-950 dark:bg-[#0b0f17] dark:text-white">
+        <main className="relative min-h-screen overflow-x-hidden bg-[#f7f3ea] text-neutral-950 dark:bg-[#0b0f17] dark:text-white">
             <div className="pointer-events-none absolute inset-0">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(59,130,246,0.07),transparent_26%),radial-gradient(circle_at_top_right,rgba(249,115,22,0.10),transparent_24%),radial-gradient(circle_at_bottom_left,rgba(244,63,94,0.06),transparent_28%)] dark:bg-[radial-gradient(circle_at_top_left,rgba(96,165,250,0.10),transparent_24%),radial-gradient(circle_at_top_right,rgba(251,146,60,0.12),transparent_24%),radial-gradient(circle_at_bottom_left,rgba(251,113,133,0.08),transparent_28%)]" />
             </div>
 
             <HomeHeader />
 
-            <div className="relative mx-auto w-full max-w-[1800px] px-3 pb-6 pt-3 sm:px-4 lg:px-6">
+            <div className="relative mx-auto w-full max-w-[1800px] px-3 pb-6 pt-[128px] sm:px-4 lg:px-6 lg:pt-[96px]">
                 <section id="today-games">
                     <TodayGamesSection games={homeGames} />
                 </section>
