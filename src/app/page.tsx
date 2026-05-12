@@ -135,6 +135,8 @@ async function mapGameListItemToFeaturedGame(
         homeTeam: game.homeTeam.displayName,
         awayTeamAbbr: game.awayTeam.abbreviation ?? game.awayTeam.displayName,
         homeTeamAbbr: game.homeTeam.abbreviation ?? game.homeTeam.displayName,
+        awayLogoUrl: game.awayTeam.logoUrl,
+        homeLogoUrl: game.homeTeam.logoUrl,
         awayRecord: awayRanking?.record ?? game.awayTeam.record ?? "-",
         homeRecord: homeRanking?.record ?? game.homeTeam.record ?? "-",
         score: game.matchupScore,

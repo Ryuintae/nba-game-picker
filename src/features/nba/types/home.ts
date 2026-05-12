@@ -40,6 +40,8 @@ export type FeaturedGame = {
     homeTeam: string;
     awayTeamAbbr: string;
     homeTeamAbbr: string;
+    awayLogoUrl?: string | null;
+    homeLogoUrl?: string | null;
     awayRecord: string;
     homeRecord: string;
     score: number;

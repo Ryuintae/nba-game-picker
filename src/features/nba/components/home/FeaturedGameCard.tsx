@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { getMatchupGradient, getTeamBrand } from "@/features/nba/lib/team-brand";
 import type { FeaturedGame } from "@/features/nba/types/home";
 
@@ -15,7 +16,34 @@ export default function FeaturedGameCard({ game }: FeaturedGameCardProps) {
             className="relative overflow-hidden rounded-[22px] p-5 sm:p-6"
             style={getMatchupGradient(game.awayTeamAbbr, game.homeTeamAbbr)}
         >
-            <div className="absolute inset-0 bg-white/38" />
+            <div className="absolute inset-0 bg-white/34" />
+            <div className="absolute inset-0 opacity-[0.18] mix-blend-soft-light [background-image:linear-gradient(rgba(255,255,255,0.72)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.72)_1px,transparent_1px)] [background-size:28px_28px]" />
+            <div className="absolute left-1/2 top-1/2 h-[280px] w-[280px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/45" />
+            <div className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-white/40" />
+            {game.awayLogoUrl ? (
+                <div className="absolute -left-12 top-1/2 h-48 w-48 -translate-y-1/2 opacity-[0.16] sm:h-56 sm:w-56">
+                    <Image
+                        src={game.awayLogoUrl}
+                        alt=""
+                        fill
+                        sizes="224px"
+                        className="object-contain drop-shadow-[0_18px_30px_rgba(0,0,0,0.2)]"
+                    />
+                </div>
+            ) : null}
+            {game.homeLogoUrl ? (
+                <div className="absolute -right-12 top-1/2 h-48 w-48 -translate-y-1/2 opacity-[0.16] sm:h-56 sm:w-56">
+                    <Image
+                        src={game.homeLogoUrl}
+                        alt=""
+                        fill
+                        sizes="224px"
+                        className="object-contain drop-shadow-[0_18px_30px_rgba(0,0,0,0.2)]"
+                    />
+                </div>
+            ) : null}
+            <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-white/28 to-transparent" />
+            <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-white/26 to-transparent" />
             <div
                 className="absolute left-0 top-0 h-full w-1.5"
                 style={{ backgroundColor: awayBrand.primary }}
@@ -45,7 +73,7 @@ export default function FeaturedGameCard({ game }: FeaturedGameCardProps) {
                     className="h-2.5 w-2.5 rounded-full"
                     style={{ backgroundColor: awayBrand.primary }}
                 />
-                                <h3 className="text-[28px] font-semibold tracking-[-0.04em] text-neutral-950 sm:text-[34px]">
+                                <h3 className="max-w-[11rem] text-[26px] font-semibold leading-[1.08] tracking-[-0.04em] text-neutral-950 sm:max-w-[14rem] sm:text-[30px]">
                                     {game.awayTeam}
                                 </h3>
                             </div>
@@ -59,7 +87,7 @@ export default function FeaturedGameCard({ game }: FeaturedGameCardProps) {
                         <div className="text-right">
                             <p className="text-[13px] text-neutral-700">Home</p>
                             <div className="mt-1 flex items-center justify-end gap-2">
-                                <h3 className="text-[28px] font-semibold tracking-[-0.04em] text-neutral-950 sm:text-[34px]">
+                                <h3 className="max-w-[11rem] text-[26px] font-semibold leading-[1.08] tracking-[-0.04em] text-neutral-950 sm:max-w-[14rem] sm:text-[30px]">
                                     {game.homeTeam}
                                 </h3>
                                 <span
