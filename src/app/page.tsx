@@ -5,16 +5,16 @@ import RankingTable from "@/features/nba/components/home/RankingTable";
 import ScoringLeadersTable from "@/features/nba/components/home/ScoringLeadersTable";
 
 import { getTodayGamesWithArtwork } from "@/features/nba/api/get-today-games-with-artwork";
-import { getScoringLeaders } from "@/features/nba/api/espn/get-scoring-leaders";
+import { getPlayerLeaderCategories } from "@/features/nba/api/espn/get-scoring-leaders";
 import { getTeamStandings } from "@/features/nba/api/espn/get-team-standings";
-import { scoringLeaders } from "@/features/nba/data/home/scoring-leaders";
+import { playerLeaderCategories } from "@/features/nba/data/home/scoring-leaders";
 import { teamRankings } from "@/features/nba/data/home/team-rankings";
 
 import type { GameListItem } from "@/features/nba/types/game";
 import type {
     FeaturedGame,
     HomeGameCard,
-    ScoringLeader,
+    PlayerLeaderCategory,
     TeamRanking,
 } from "@/features/nba/types/home";
 
@@ -74,13 +74,13 @@ function getFeaturedGame(games: GameListItem[]): FeaturedGame | null {
 export default async function HomePage() {
     let todayGames: GameListItem[] = [];
     let standings: TeamRanking[] = teamRankings;
-    let leaders: ScoringLeader[] = scoringLeaders;
+    let leaderCategories: PlayerLeaderCategory[] = playerLeaderCategories;
 
     const [todayGamesResult, standingsResult, leadersResult] =
         await Promise.allSettled([
             getTodayGamesWithArtwork(),
             getTeamStandings(),
-            getScoringLeaders(),
+            getPlayerLeaderCategories(),
         ]);
 
     if (todayGamesResult.status === "fulfilled") {
@@ -102,7 +102,7 @@ export default async function HomePage() {
     }
 
     if (leadersResult.status === "fulfilled") {
-        leaders = leadersResult.value;
+        leaderCategories = leadersResult.value;
     } else {
         console.error(
             "[HomePage] failed to fetch scoring leaders:",
@@ -126,8 +126,8 @@ export default async function HomePage() {
                     <TodayGamesSection games={homeGames} />
                 </section>
 
-                <section className="grid gap-3 xl:grid-cols-[1.6fr_1fr]">
-                    <div id="featured-game">
+                <section className="grid gap-3 xl:grid-cols-[minmax(0,1.4fr)_minmax(380px,0.6fr)] xl:items-stretch">
+                    <div id="featured-game" className="h-full">
                         {featuredGame ? (
                             <FeaturedGameSection game={featuredGame} />
                         ) : (
@@ -142,15 +142,15 @@ export default async function HomePage() {
                         )}
                     </div>
 
-                    <div className="grid gap-3">
-                        <div id="rankings">
-                            <RankingTable teams={standings} />
-                        </div>
-
+                    <aside className="grid h-full gap-3">
                         <div id="leaders">
-                            <ScoringLeadersTable players={leaders} />
+                            <ScoringLeadersTable categories={leaderCategories} />
                         </div>
-                    </div>
+                    </aside>
+                </section>
+
+                <section id="rankings" className="mt-3">
+                    <RankingTable teams={standings} />
                 </section>
             </div>
         </main>

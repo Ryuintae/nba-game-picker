@@ -62,9 +62,18 @@ export type ScoringLeader = {
     team: string;
     position?: string;
     gamesPlayed?: number;
+    leaderValue?: number;
     ppg: number;
     apg?: number;
     rpg?: number;
+    threePointersMade?: number;
     headshotUrl?: string | null;
     teamLogoUrl?: string | null;
+};
+
+export type PlayerLeaderCategory = {
+    key: "scoring" | "assists" | "threePointers";
+    label: string;
+    statLabel: "PPG" | "APG" | "3PM";
+    players: ScoringLeader[];
 };
