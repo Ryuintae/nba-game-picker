@@ -1,5 +1,6 @@
 import type { GameListItem } from "../types/game";
 import { getTodayGames } from "./api-sports/get-today-games";
+import { getEspnTodayGames } from "./espn/get-today-games";
 import { getTeamArtworkByAbbr } from "./thesportsdb/get-team-artwork-by-abbr";
 
 async function attachArtworkToGame(game: GameListItem): Promise<GameListItem> {
@@ -28,7 +29,17 @@ async function attachArtworkToGame(game: GameListItem): Promise<GameListItem> {
 }
 
 export async function getTodayGamesWithArtwork(): Promise<GameListItem[]> {
-    const games = await getTodayGames();
+    let games: GameListItem[] = [];
+
+    try {
+        games = await getTodayGames();
+    } catch (error) {
+        console.error("[getTodayGamesWithArtwork] API-SPORTS failed:", error);
+    }
+
+    if (games.length === 0) {
+        games = await getEspnTodayGames();
+    }
 
     return Promise.all(games.map(attachArtworkToGame));
 }
