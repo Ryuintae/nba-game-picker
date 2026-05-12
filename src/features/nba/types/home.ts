@@ -12,6 +12,8 @@ export type HomeGameCard = {
     homeTeam: string;
     awayTeamAbbr: string;
     homeTeamAbbr: string;
+    awayLogoUrl?: string | null;
+    homeLogoUrl?: string | null;
     score: number;
 };
 

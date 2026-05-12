@@ -52,6 +52,7 @@ function formatStartTime(dateString: string): string {
         hour: "2-digit",
         minute: "2-digit",
         hour12: false,
+        timeZone: "Asia/Seoul",
     }).format(new Date(dateString));
 }
 
