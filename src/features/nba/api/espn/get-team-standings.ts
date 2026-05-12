@@ -132,6 +132,9 @@ function mapEntryToTeamRanking(entry: EspnStandingEntry): TeamRanking {
         winRate,
         wins,
         losses,
+        lastTen: getStatDisplayValue(entry.stats, "Last Ten Games"),
+        avgPointsFor: getStatDisplayValue(entry.stats, "avgPointsFor"),
+        avgPointsAgainst: getStatDisplayValue(entry.stats, "avgPointsAgainst"),
         gamesBehind: getStatDisplayValue(entry.stats, "gamesBehind"),
         logoUrl: entry.team.logos?.[0]?.href ?? null,
     };

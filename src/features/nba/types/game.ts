@@ -6,6 +6,7 @@ export type GameTeam = {
     displayName: string;
     abbreviation?: string;
     city?: string;
+    record?: string;
     score?: number | null;
     logoUrl?: string | null;
 };

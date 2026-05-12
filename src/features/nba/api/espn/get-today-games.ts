@@ -23,6 +23,11 @@ type EspnScoreboardCompetitor = {
     homeAway?: "home" | "away";
     score?: string;
     team?: EspnScoreboardTeam;
+    records?: Array<{
+        name?: string;
+        type?: string;
+        summary?: string;
+    }>;
 };
 
 type EspnScoreboardCompetition = {
@@ -89,6 +94,9 @@ function mapEspnTeam(
 ): GameTeam {
     const team = competitor?.team;
     const id = Number(team?.id);
+    const record = competitor?.records?.find((item) => {
+        return item.type === "total" || item.name === "overall";
+    });
 
     return {
         id: Number.isFinite(id) ? id : 0,
@@ -96,6 +104,7 @@ function mapEspnTeam(
         displayName: team?.displayName ?? team?.shortDisplayName ?? "NBA",
         abbreviation: team?.abbreviation,
         city: team?.location,
+        record: record?.summary,
         score: toScore(competitor?.score),
         logoUrl: team?.logo ?? null,
     };

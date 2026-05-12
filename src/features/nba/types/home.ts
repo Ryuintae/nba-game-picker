@@ -27,6 +27,12 @@ export type FeaturedGameStats = {
     headToHead: string;
 };
 
+export type RecentGameResult = {
+    opponent: string;
+    result: "W" | "L";
+    score: string;
+};
+
 export type FeaturedGame = {
     id: string;
     time: string;
@@ -40,6 +46,10 @@ export type FeaturedGame = {
     streak: string;
     reason: string;
     stats: FeaturedGameStats;
+    recentResults: {
+        away: RecentGameResult[];
+        home: RecentGameResult[];
+    };
 };
 
 export type TeamRanking = {
@@ -51,6 +61,9 @@ export type TeamRanking = {
     winRate: string;
     wins?: number;
     losses?: number;
+    lastTen?: string;
+    avgPointsFor?: string;
+    avgPointsAgainst?: string;
     gamesBehind?: string;
     logoUrl?: string | null;
     fanartUrl?: string | null;
