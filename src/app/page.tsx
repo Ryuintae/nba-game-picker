@@ -4,9 +4,13 @@ import FeaturedGameSection from "@/features/nba/components/home/FeaturedGameSect
 import RankingTable from "@/features/nba/components/home/RankingTable";
 import ScoringLeadersTable from "@/features/nba/components/home/ScoringLeadersTable";
 
-import { getTodayGamesWithArtwork } from "@/features/nba/api/get-today-games-with-artwork";
+import {
+    getHeadToHeadSummary,
+    getRecentGameResults,
+} from "@/features/nba/api/espn/get-team-schedule-summary";
 import { getPlayerLeaderCategories } from "@/features/nba/api/espn/get-scoring-leaders";
 import { getTeamStandings } from "@/features/nba/api/espn/get-team-standings";
+import { getTodayGamesWithArtwork } from "@/features/nba/api/get-today-games-with-artwork";
 import { playerLeaderCategories } from "@/features/nba/data/home/scoring-leaders";
 import { teamRankings } from "@/features/nba/data/home/team-rankings";
 
@@ -15,11 +19,11 @@ import type {
     FeaturedGame,
     HomeGameCard,
     PlayerLeaderCategory,
+    RecentGameResult,
     TeamRanking,
 } from "@/features/nba/types/home";
 
 function mapGameListItemToHomeGameCard(game: GameListItem): HomeGameCard {
-
     return {
         id: game.id,
         time: game.startTime,
@@ -31,44 +35,140 @@ function mapGameListItemToHomeGameCard(game: GameListItem): HomeGameCard {
     };
 }
 
-function mapGameListItemToFeaturedGame(game: GameListItem): FeaturedGame {
-    return {
-        id: game.id,
-        time: game.startTime,
-        awayTeam: game.awayTeam.displayName,
-        homeTeam: game.homeTeam.displayName,
-        awayTeamAbbr: game.awayTeam.abbreviation ?? game.awayTeam.displayName,
-        homeTeamAbbr: game.homeTeam.abbreviation ?? game.homeTeam.displayName,
-        awayRecord: "-",
-        homeRecord: "-",
-        score: game.matchupScore,
-        streak: "오늘의 추천 경기",
-        reason: "현재 경기 정보와 Matchup Score를 기준으로 선정된 추천 경기입니다.",
-        stats: {
-            awayLast5: "-",
-            homeLast5: "-",
-            awayPpg: "-",
-            homePpg: "-",
-            awayOppPpg: "-",
-            homeOppPpg: "-",
-            awayWinRate: "-",
-            homeWinRate: "-",
-            headToHead: "-",
-        },
-    };
+function findTeamRanking(
+    standings: TeamRanking[],
+    teamName: string,
+    abbreviation?: string
+): TeamRanking | undefined {
+    const normalizedTeamName = teamName.toLowerCase();
+    const normalizedAbbreviation = abbreviation?.toLowerCase();
+
+    return standings.find((team) => {
+        return (
+            team.team.toLowerCase() === normalizedTeamName ||
+            team.abbreviation?.toLowerCase() === normalizedAbbreviation
+        );
+    });
 }
-function getFeaturedGame(games: GameListItem[]): FeaturedGame | null {
+
+function formatMatchupReason(
+    awayRanking: TeamRanking | undefined,
+    homeRanking: TeamRanking | undefined
+): string {
+    if (!awayRanking || !homeRanking) {
+        return "현재 경기 정보와 Matchup Score를 기준으로 선정된 추천 경기입니다.";
+    }
+
+    return `${awayRanking.team}(${awayRanking.record})와 ${homeRanking.team}(${homeRanking.record})의 시즌 지표를 함께 비교해 선정한 추천 경기입니다.`;
+}
+
+function pickFeaturedGame(games: GameListItem[]): GameListItem | null {
     if (games.length === 0) {
         return null;
     }
 
-    const bestGame = games.reduce((bestGame, currentGame) => {
+    return games.reduce((bestGame, currentGame) => {
         return currentGame.matchupScore > bestGame.matchupScore
             ? currentGame
             : bestGame;
     });
+}
 
-    return mapGameListItemToFeaturedGame(bestGame);
+async function getScheduleSummary(game: GameListItem): Promise<{
+    headToHead: string;
+    awayRecentResults: RecentGameResult[];
+    homeRecentResults: RecentGameResult[];
+}> {
+    const [headToHead, awayRecentResults, homeRecentResults] =
+        await Promise.all([
+            getHeadToHeadSummary({
+                teamAbbr: game.awayTeam.abbreviation,
+                opponentAbbr: game.homeTeam.abbreviation,
+                beforeDate: game.date,
+            }),
+            getRecentGameResults({
+                teamAbbr: game.awayTeam.abbreviation,
+                beforeDate: game.date,
+            }),
+            getRecentGameResults({
+                teamAbbr: game.homeTeam.abbreviation,
+                beforeDate: game.date,
+            }),
+        ]);
+
+    return {
+        headToHead,
+        awayRecentResults,
+        homeRecentResults,
+    };
+}
+
+async function mapGameListItemToFeaturedGame(
+    game: GameListItem,
+    standings: TeamRanking[]
+): Promise<FeaturedGame> {
+    const awayRanking = findTeamRanking(
+        standings,
+        game.awayTeam.displayName,
+        game.awayTeam.abbreviation
+    );
+    const homeRanking = findTeamRanking(
+        standings,
+        game.homeTeam.displayName,
+        game.homeTeam.abbreviation
+    );
+    const { headToHead, awayRecentResults, homeRecentResults } =
+        await getScheduleSummary(game).catch((error) => {
+            console.error("[HomePage] failed to fetch schedule summary:", error);
+
+            return {
+                headToHead: "-",
+                awayRecentResults: [],
+                homeRecentResults: [],
+            };
+        });
+
+    return {
+        id: game.id,
+        time: game.startTime,
+        awayTeam: game.awayTeam.displayName,
+        homeTeam: game.homeTeam.displayName,
+        awayTeamAbbr: game.awayTeam.abbreviation ?? game.awayTeam.displayName,
+        homeTeamAbbr: game.homeTeam.abbreviation ?? game.homeTeam.displayName,
+        awayRecord: awayRanking?.record ?? game.awayTeam.record ?? "-",
+        homeRecord: homeRanking?.record ?? game.homeTeam.record ?? "-",
+        score: game.matchupScore,
+        streak: "오늘의 추천 경기",
+        reason: formatMatchupReason(awayRanking, homeRanking),
+        stats: {
+            awayLast5: awayRanking?.lastTen ?? "-",
+            homeLast5: homeRanking?.lastTen ?? "-",
+            awayPpg: awayRanking?.avgPointsFor ?? "-",
+            homePpg: homeRanking?.avgPointsFor ?? "-",
+            awayOppPpg: awayRanking?.avgPointsAgainst ?? "-",
+            homeOppPpg: homeRanking?.avgPointsAgainst ?? "-",
+            awayWinRate: awayRanking?.winRate ?? "-",
+            homeWinRate: homeRanking?.winRate ?? "-",
+            headToHead,
+        },
+        recentResults: {
+            away: awayRecentResults,
+            home: homeRecentResults,
+        },
+    };
+}
+
+async function getFeaturedGame(
+    games: GameListItem[],
+    standings: TeamRanking[]
+): Promise<FeaturedGame | null> {
+    const bestGame = pickFeaturedGame(games);
+
+    if (!bestGame) {
+        return null;
+    }
+
+    return mapGameListItemToFeaturedGame(bestGame, standings);
 }
 
 export default async function HomePage() {
@@ -111,7 +211,7 @@ export default async function HomePage() {
     }
 
     const homeGames = todayGames.map(mapGameListItemToHomeGameCard);
-    const featuredGame = getFeaturedGame(todayGames);
+    const featuredGame = await getFeaturedGame(todayGames, standings);
 
     return (
         <main className="relative min-h-screen overflow-hidden bg-[#f7f3ea] text-neutral-950 dark:bg-[#0b0f17] dark:text-white">
