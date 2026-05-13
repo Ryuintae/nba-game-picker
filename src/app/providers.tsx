@@ -20,10 +20,10 @@ const THEME_CHANGE_EVENT = "nba-theme-change";
 
 function getThemeSnapshot(): Theme {
     if (typeof window === "undefined") {
-        return "dark";
+        return "light";
     }
 
-    return window.localStorage.getItem("theme") === "light" ? "light" : "dark";
+    return window.localStorage.getItem("theme") === "dark" ? "dark" : "light";
 }
 
 function subscribeToThemeChange(onStoreChange: () => void) {
@@ -53,7 +53,7 @@ export default function Providers({
     const theme: Theme = useSyncExternalStore(
         subscribeToThemeChange,
         getThemeSnapshot,
-        (): Theme => "dark"
+        (): Theme => "light"
     );
 
     const setTheme = useCallback((nextTheme: Theme) => {
