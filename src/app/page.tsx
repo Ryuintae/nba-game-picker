@@ -23,6 +23,109 @@ import type {
     TeamRanking,
 } from "@/features/nba/types/home";
 
+type HomePageProps = {
+    searchParams: Promise<{
+        preview?: string | string[];
+    }>;
+};
+
+const DEMO_PREVIEW_GAMES: HomeGameCard[] = [
+    {
+        id: "demo-preview-gsw-lal",
+        time: "11:00",
+        awayTeam: "Golden State Warriors",
+        homeTeam: "Los Angeles Lakers",
+        awayTeamAbbr: "GSW",
+        homeTeamAbbr: "LAL",
+        awayLogoUrl: "https://a.espncdn.com/i/teamlogos/nba/500/gs.png",
+        homeLogoUrl: "https://a.espncdn.com/i/teamlogos/nba/500/lal.png",
+        score: 96,
+    },
+    {
+        id: "demo-preview-bos-nyk",
+        time: "09:30",
+        awayTeam: "Boston Celtics",
+        homeTeam: "New York Knicks",
+        awayTeamAbbr: "BOS",
+        homeTeamAbbr: "NYK",
+        awayLogoUrl: "https://a.espncdn.com/i/teamlogos/nba/500/bos.png",
+        homeLogoUrl: "https://a.espncdn.com/i/teamlogos/nba/500/ny.png",
+        score: 88,
+    },
+    {
+        id: "demo-preview-den-phx",
+        time: "10:00",
+        awayTeam: "Denver Nuggets",
+        homeTeam: "Phoenix Suns",
+        awayTeamAbbr: "DEN",
+        homeTeamAbbr: "PHX",
+        awayLogoUrl: "https://a.espncdn.com/i/teamlogos/nba/500/den.png",
+        homeLogoUrl: "https://a.espncdn.com/i/teamlogos/nba/500/phx.png",
+        score: 84,
+    },
+    {
+        id: "demo-preview-dal-lac",
+        time: "11:30",
+        awayTeam: "Dallas Mavericks",
+        homeTeam: "LA Clippers",
+        awayTeamAbbr: "DAL",
+        homeTeamAbbr: "LAC",
+        awayLogoUrl: "https://a.espncdn.com/i/teamlogos/nba/500/dal.png",
+        homeLogoUrl: "https://a.espncdn.com/i/teamlogos/nba/500/lac.png",
+        score: 79,
+    },
+];
+
+const DEMO_FEATURED_GAME: FeaturedGame = {
+    id: "demo-preview-gsw-lal",
+    time: "11:00",
+    awayTeam: "Golden State Warriors",
+    homeTeam: "Los Angeles Lakers",
+    awayTeamAbbr: "GSW",
+    homeTeamAbbr: "LAL",
+    awayLogoUrl: "https://a.espncdn.com/i/teamlogos/nba/500/gs.png",
+    homeLogoUrl: "https://a.espncdn.com/i/teamlogos/nba/500/lal.png",
+    awayRecord: "48-34",
+    homeRecord: "53-29",
+    score: 96,
+    streak: "데모 추천 경기",
+    reason:
+        "Golden State Warriors와 Los Angeles Lakers의 스타 파워와 공격 지표를 중심으로 구성한 데모 프리뷰 매치업입니다.",
+    stats: {
+        awayLast5: "7-3",
+        homeLast5: "8-2",
+        awayPpg: "114.8",
+        homePpg: "118.2",
+        awayOppPpg: "111.6",
+        homeOppPpg: "109.7",
+        awayWinRate: ".585",
+        homeWinRate: ".646",
+        headToHead: "최근 5전 LAL 3승 2패",
+    },
+    recentResults: {
+        away: [
+            { opponent: "PHX", result: "W", score: "118-112" },
+            { opponent: "DEN", result: "L", score: "104-109" },
+            { opponent: "SAC", result: "W", score: "121-113" },
+        ],
+        home: [
+            { opponent: "LAC", result: "W", score: "116-108" },
+            { opponent: "DAL", result: "W", score: "122-117" },
+            { opponent: "OKC", result: "L", score: "109-114" },
+        ],
+    },
+};
+
+function isDemoPreview(preview: string | string[] | undefined) {
+    return Array.isArray(preview)
+        ? preview.includes("demo")
+        : preview === "demo";
+}
+
+function getDemoPreviewGames() {
+    return DEMO_PREVIEW_GAMES;
+}
+
 function mapGameListItemToHomeGameCard(game: GameListItem): HomeGameCard {
     return {
         id: game.id,
@@ -175,7 +278,11 @@ async function getFeaturedGame(
     return mapGameListItemToFeaturedGame(bestGame, standings);
 }
 
-export default async function HomePage() {
+export default async function HomePage({ searchParams }: HomePageProps) {
+    const resolvedSearchParams = await searchParams;
+    const shouldShowDemoPreview = isDemoPreview(
+        resolvedSearchParams.preview
+    );
     let todayGames: GameListItem[] = [];
     let standings: TeamRanking[] = teamRankings;
     let leaderCategories: PlayerLeaderCategory[] = playerLeaderCategories;
@@ -214,8 +321,13 @@ export default async function HomePage() {
         );
     }
 
-    const homeGames = todayGames.map(mapGameListItemToHomeGameCard);
-    const featuredGame = await getFeaturedGame(todayGames, standings);
+    const realHomeGames = todayGames.map(mapGameListItemToHomeGameCard);
+    const homeGames = shouldShowDemoPreview
+        ? getDemoPreviewGames()
+        : realHomeGames;
+    const featuredGame = shouldShowDemoPreview
+        ? DEMO_FEATURED_GAME
+        : await getFeaturedGame(todayGames, standings);
 
     return (
         <main className="relative min-h-screen overflow-x-hidden bg-[#f2f4f7] text-neutral-950 dark:bg-[#080b12] dark:text-white">
