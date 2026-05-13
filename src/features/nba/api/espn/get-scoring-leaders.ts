@@ -35,6 +35,7 @@ type EspnAthleteStatsEntry = {
 
 type EspnAthleteStatsResponse = {
     athletes?: EspnAthleteStatsEntry[];
+    categories?: EspnStatCategory[];
 };
 
 type LeaderCategoryConfig = {
@@ -78,13 +79,41 @@ const LEADER_CATEGORY_CONFIGS: LeaderCategoryConfig[] = [
     },
 ];
 
+function findCategory(
+    categories: EspnStatCategory[] | undefined,
+    categoryName: string
+) {
+    return categories?.find((item) => item.name === categoryName);
+}
+
+function getStatIndex(
+    categories: EspnStatCategory[] | undefined,
+    fallbackCategories: EspnStatCategory[] | undefined,
+    categoryName: string,
+    statName: string
+) {
+    const category = findCategory(categories, categoryName);
+    const statNames =
+        category?.names && category.names.length > 0
+            ? category.names
+            : findCategory(fallbackCategories, categoryName)?.names;
+
+    return statNames?.indexOf(statName) ?? -1;
+}
+
 function getStatValue(
     categories: EspnStatCategory[] | undefined,
+    fallbackCategories: EspnStatCategory[] | undefined,
     categoryName: string,
     statName: string
 ): number | undefined {
-    const category = categories?.find((item) => item.name === categoryName);
-    const statIndex = category?.names?.indexOf(statName) ?? -1;
+    const category = findCategory(categories, categoryName);
+    const statIndex = getStatIndex(
+        categories,
+        fallbackCategories,
+        categoryName,
+        statName
+    );
 
     if (statIndex < 0) {
         return undefined;
@@ -95,12 +124,18 @@ function getStatValue(
 
 function getRank(
     categories: EspnStatCategory[] | undefined,
+    fallbackCategories: EspnStatCategory[] | undefined,
     categoryName: string,
     statName: string,
     fallbackRank: number
 ): number {
-    const category = categories?.find((item) => item.name === categoryName);
-    const statIndex = category?.names?.indexOf(statName) ?? -1;
+    const category = findCategory(categories, categoryName);
+    const statIndex = getStatIndex(
+        categories,
+        fallbackCategories,
+        categoryName,
+        statName
+    );
     const rank = Number(category?.ranks?.[statIndex]);
 
     return Number.isFinite(rank) && rank > 0 ? rank : fallbackRank;
@@ -113,20 +148,37 @@ function toOneDecimal(value: number | undefined): number {
 function mapEntryToPlayerLeader(
     entry: EspnAthleteStatsEntry,
     index: number,
+    statCategories: EspnStatCategory[] | undefined,
     config: LeaderCategoryConfig
 ): ScoringLeader {
     const ppg = toOneDecimal(
-        getStatValue(entry.categories, "offensive", "avgPoints")
+        getStatValue(
+            entry.categories,
+            statCategories,
+            "offensive",
+            "avgPoints"
+        )
     );
     const apg = toOneDecimal(
-        getStatValue(entry.categories, "offensive", "avgAssists")
+        getStatValue(
+            entry.categories,
+            statCategories,
+            "offensive",
+            "avgAssists"
+        )
     );
     const rpg = toOneDecimal(
-        getStatValue(entry.categories, "general", "avgRebounds")
+        getStatValue(
+            entry.categories,
+            statCategories,
+            "general",
+            "avgRebounds"
+        )
     );
     const threePointersMade = toOneDecimal(
         getStatValue(
             entry.categories,
+            statCategories,
             "offensive",
             "avgThreePointFieldGoalsMade"
         )
@@ -135,6 +187,7 @@ function mapEntryToPlayerLeader(
     return {
         rank: getRank(
             entry.categories,
+            statCategories,
             config.rankCategory,
             config.rankStat,
             index + 1
@@ -142,9 +195,19 @@ function mapEntryToPlayerLeader(
         name: entry.athlete.displayName ?? "Unknown Player",
         team: entry.athlete.teamShortName ?? entry.athlete.teamName ?? "NBA",
         position: entry.athlete.position?.abbreviation,
-        gamesPlayed: getStatValue(entry.categories, "general", "gamesPlayed"),
+        gamesPlayed: getStatValue(
+            entry.categories,
+            statCategories,
+            "general",
+            "gamesPlayed"
+        ),
         leaderValue: toOneDecimal(
-            getStatValue(entry.categories, config.rankCategory, config.rankStat)
+            getStatValue(
+                entry.categories,
+                statCategories,
+                config.rankCategory,
+                config.rankStat
+            )
         ),
         ppg,
         apg,
@@ -193,7 +256,7 @@ async function getPlayerLeadersByCategory(
         label: config.label,
         statLabel: config.statLabel,
         players: (data.athletes ?? []).map((entry, index) =>
-            mapEntryToPlayerLeader(entry, index, config)
+            mapEntryToPlayerLeader(entry, index, data.categories, config)
         ),
     };
 }
