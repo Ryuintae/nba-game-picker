@@ -5,6 +5,14 @@ const ESPN_NBA_TEAM_SCHEDULE_URL =
 
 export const DEFAULT_ESPN_NBA_TEAM_SCHEDULE_SEASON = 2026;
 
+const ESPN_TEAM_ABBR_ALIASES: Record<string, string> = {
+    GSW: "GS",
+    NYK: "NY",
+    NOP: "NO",
+    SAS: "SA",
+    UTA: "UTAH",
+};
+
 type EspnScheduleTeam = {
     abbreviation?: string;
     displayName?: string;
@@ -55,6 +63,12 @@ type GetRecentGameResultsOptions = TeamScheduleOptions & {
     limit?: number;
 };
 
+function normalizeEspnTeamAbbr(abbreviation: string | undefined): string {
+    const upperAbbreviation = abbreviation?.toUpperCase() ?? "";
+
+    return ESPN_TEAM_ABBR_ALIASES[upperAbbreviation] ?? upperAbbreviation;
+}
+
 function isFinalEvent(event: EspnScheduleEvent): boolean {
     const statusType = event.competitions?.[0]?.status?.type;
 
@@ -70,23 +84,35 @@ function getCompetitors(event: EspnScheduleEvent): EspnScheduleCompetitor[] {
 }
 
 function hasTeam(event: EspnScheduleEvent, abbreviation: string): boolean {
+    const normalizedAbbreviation = normalizeEspnTeamAbbr(abbreviation);
+
     return getCompetitors(event).some((competitor) => {
-        return competitor.team?.abbreviation === abbreviation;
+        return (
+            normalizeEspnTeamAbbr(competitor.team?.abbreviation) ===
+            normalizedAbbreviation
+        );
     });
 }
 
 function getWinnerAbbr(event: EspnScheduleEvent): string | null {
     const winner = getCompetitors(event).find((competitor) => competitor.winner);
 
-    return winner?.team?.abbreviation ?? null;
+    return winner?.team?.abbreviation
+        ? normalizeEspnTeamAbbr(winner.team.abbreviation)
+        : null;
 }
 
 function getTeamCompetitor(
     event: EspnScheduleEvent,
     teamAbbr: string
 ): EspnScheduleCompetitor | undefined {
+    const normalizedTeamAbbr = normalizeEspnTeamAbbr(teamAbbr);
+
     return getCompetitors(event).find((competitor) => {
-        return competitor.team?.abbreviation === teamAbbr;
+        return (
+            normalizeEspnTeamAbbr(competitor.team?.abbreviation) ===
+            normalizedTeamAbbr
+        );
     });
 }
 
@@ -94,8 +120,13 @@ function getOpponentCompetitor(
     event: EspnScheduleEvent,
     teamAbbr: string
 ): EspnScheduleCompetitor | undefined {
+    const normalizedTeamAbbr = normalizeEspnTeamAbbr(teamAbbr);
+
     return getCompetitors(event).find((competitor) => {
-        return competitor.team?.abbreviation !== teamAbbr;
+        return (
+            normalizeEspnTeamAbbr(competitor.team?.abbreviation) !==
+            normalizedTeamAbbr
+        );
     });
 }
 
@@ -131,11 +162,12 @@ async function getTeamSchedule({
         return [];
     }
 
+    const normalizedTeamAbbr = normalizeEspnTeamAbbr(teamAbbr);
     const params = new URLSearchParams({
         season: String(season),
     });
     const response = await fetch(
-        `${ESPN_NBA_TEAM_SCHEDULE_URL}/${teamAbbr.toLowerCase()}/schedule?${params}`,
+        `${ESPN_NBA_TEAM_SCHEDULE_URL}/${normalizedTeamAbbr.toLowerCase()}/schedule?${params}`,
         {
             headers: {
                 "User-Agent": "Mozilla/5.0",
@@ -167,9 +199,14 @@ export async function getHeadToHeadSummary({
     }
 
     const events = await getTeamSchedule({ teamAbbr, season });
+    const normalizedTeamAbbr = normalizeEspnTeamAbbr(teamAbbr);
+    const normalizedOpponentAbbr = normalizeEspnTeamAbbr(opponentAbbr);
     const headToHeadGames = getCompletedGamesBefore(events, beforeDate)
         .filter((event) => {
-            return hasTeam(event, teamAbbr) && hasTeam(event, opponentAbbr);
+            return (
+                hasTeam(event, normalizedTeamAbbr) &&
+                hasTeam(event, normalizedOpponentAbbr)
+            );
         })
         .slice(0, limit);
 
@@ -178,10 +215,10 @@ export async function getHeadToHeadSummary({
     }
 
     const teamWins = headToHeadGames.filter((event) => {
-        return getWinnerAbbr(event) === teamAbbr;
+        return getWinnerAbbr(event) === normalizedTeamAbbr;
     }).length;
     const opponentWins = headToHeadGames.filter((event) => {
-        return getWinnerAbbr(event) === opponentAbbr;
+        return getWinnerAbbr(event) === normalizedOpponentAbbr;
     }).length;
 
     return `최근 ${headToHeadGames.length}전 ${teamAbbr} ${teamWins}승 ${opponentWins}패`;
