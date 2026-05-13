@@ -12,8 +12,8 @@ export default function FeaturedGameSection({
     game,
 }: FeaturedGameSectionProps) {
     return (
-        <section className="flex h-full flex-col rounded-[24px] border border-black/6 bg-white dark:border-white/10 dark:bg-[#111214]">
-            <div className="flex items-center justify-between border-b border-black/6 px-4 py-3 dark:border-white/10 sm:px-5">
+        <section className="flex h-full flex-col border border-black/10 bg-white dark:border-white/10 dark:bg-[#111214]">
+            <div className="flex items-center justify-between border-b border-black/8 px-4 py-3 dark:border-white/10 sm:px-5">
                 <div>
                     <p className="text-[14px] font-semibold tracking-[-0.02em] text-neutral-900 dark:text-white">
                         오늘의 추천 경기
@@ -33,7 +33,7 @@ export default function FeaturedGameSection({
             </div>
 
             <div className="flex flex-1 flex-col p-4 sm:p-5">
-                <div className="grid gap-4 lg:grid-cols-[1.25fr_0.75fr] lg:items-stretch">
+                <div className="grid gap-5 lg:grid-cols-[1.25fr_0.75fr] lg:items-stretch">
                     <FeaturedGameCard game={game} />
                     <MatchupPanel game={game} />
                 </div>

@@ -31,7 +31,7 @@ function getTopTeam(teams: TeamRanking[]) {
 function TeamLogo({ team, size = 34 }: { team: TeamRanking; size?: number }) {
     return (
         <div
-            className="relative shrink-0 overflow-hidden rounded-full bg-white shadow-sm ring-1 ring-black/8 dark:bg-white/10 dark:ring-white/10"
+            className="relative shrink-0 overflow-hidden rounded-full bg-white ring-1 ring-black/8 dark:bg-white/10 dark:ring-white/10"
             style={{ width: size, height: size }}
         >
             {team.logoUrl ? (
@@ -52,12 +52,12 @@ export default function RankingTable({ teams }: RankingTableProps) {
         <Section
             title="컨퍼런스 순위"
             action={
-                <span className="rounded-full bg-neutral-100 px-2.5 py-1 text-[11px] font-semibold text-neutral-600 dark:bg-white/10 dark:text-neutral-300">
+                <span className="text-[11px] font-semibold text-neutral-500 dark:text-neutral-400">
                     2025-26 정규시즌
                 </span>
             }
         >
-            <div className="grid gap-4 xl:grid-cols-2">
+            <div className="grid gap-6 xl:grid-cols-2">
                 {CONFERENCES.map((conference) => {
                     const conferenceTeams = getConferenceTeams(
                         teams,
@@ -68,37 +68,26 @@ export default function RankingTable({ teams }: RankingTableProps) {
                     return (
                         <div
                             key={conference.key}
-                            className="overflow-hidden rounded-[20px] border border-black/6 bg-[#fbfcfd] dark:border-white/10 dark:bg-[#15171b]"
+                            className="overflow-hidden border border-black/8 bg-[#fbfcfd] dark:border-white/10 dark:bg-[#15171b]"
                         >
-                            <div className="relative overflow-hidden p-4 sm:p-5">
-                                {topTeam?.fanartUrl ? (
-                                    <Image
-                                        src={topTeam.fanartUrl}
-                                        alt=""
-                                        fill
-                                        sizes="(min-width: 1280px) 50vw, 100vw"
-                                        className="object-cover opacity-[0.14]"
-                                    />
-                                ) : null}
-                                <div className="absolute inset-0 bg-gradient-to-r from-[#fbfcfd] via-[#fbfcfd]/95 to-[#fbfcfd]/65 dark:from-[#15171b] dark:via-[#15171b]/95 dark:to-[#15171b]/75" />
-
-                                <div className="relative flex items-end justify-between gap-4">
+                            <div className="border-b border-black/8 p-4 dark:border-white/10 sm:p-5">
+                                <div className="flex items-end justify-between gap-4">
                                     <div className="min-w-0">
                                         <p className="text-[11px] font-semibold uppercase text-neutral-400">
                                             {conference.shortTitle} standings
                                         </p>
-                                        <h3 className="mt-1 text-[20px] font-semibold tracking-[-0.04em] text-neutral-950 dark:text-white">
+                                        <h3 className="mt-1 text-[20px] font-semibold tracking-[-0.03em] text-neutral-950 dark:text-white">
                                             {conference.title}
                                         </h3>
                                         <p className="mt-1 text-[12px] text-neutral-500 dark:text-neutral-400">
                                             {topTeam
-                                                ? `${topTeam.team}가 ${topTeam.record}로 선두`
+                                                ? `${topTeam.team} ${topTeam.record}`
                                                 : "순위 데이터를 확인 중입니다"}
                                         </p>
                                     </div>
 
                                     {topTeam ? (
-                                        <div className="flex items-center gap-2 rounded-full border border-black/6 bg-white/80 px-3 py-2 shadow-sm backdrop-blur dark:border-white/10 dark:bg-white/10">
+                                        <div className="flex items-center gap-2 border border-black/8 bg-white px-3 py-2 dark:border-white/10 dark:bg-white/10">
                                             <TeamLogo team={topTeam} size={34} />
                                             <div className="hidden text-right sm:block">
                                                 <p className="text-[12px] font-semibold text-neutral-950 dark:text-white">
@@ -113,7 +102,7 @@ export default function RankingTable({ teams }: RankingTableProps) {
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-[46px_1fr_72px_58px_44px] gap-2 border-y border-black/6 bg-white/70 px-4 py-2 text-[10px] font-semibold uppercase text-neutral-400 dark:border-white/10 dark:bg-white/[0.03]">
+                            <div className="grid grid-cols-[46px_1fr_72px_58px_44px] gap-2 border-b border-black/8 bg-white/70 px-4 py-2 text-[10px] font-semibold uppercase text-neutral-400 dark:border-white/10 dark:bg-white/[0.03]">
                                 <span>순위</span>
                                 <span>팀</span>
                                 <span className="text-right">승패</span>
@@ -121,7 +110,7 @@ export default function RankingTable({ teams }: RankingTableProps) {
                                 <span className="text-right">GB</span>
                             </div>
 
-                            <div className="divide-y divide-black/6 dark:divide-white/10">
+                            <div className="divide-y divide-black/8 dark:divide-white/10">
                                 {conferenceTeams.map((team) => (
                                     <div
                                         key={`${conference.key}-${team.team}`}
@@ -130,7 +119,7 @@ export default function RankingTable({ teams }: RankingTableProps) {
                                         <span
                                             className={
                                                 team.rank <= 6
-                                                    ? "inline-flex h-7 w-7 items-center justify-center rounded-full bg-neutral-950 text-[12px] font-semibold text-white dark:bg-white dark:text-neutral-950"
+                                                    ? "inline-flex h-7 w-7 items-center justify-center text-[12px] font-semibold text-neutral-950 dark:text-white"
                                                     : "inline-flex h-7 w-7 items-center justify-center text-[12px] font-semibold text-neutral-500 dark:text-neutral-400"
                                             }
                                         >

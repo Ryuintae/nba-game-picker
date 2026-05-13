@@ -58,7 +58,7 @@ export default function InstallPrompt() {
         <div className="flex flex-col items-start gap-3">
             <button
                 onClick={handleInstallClick}
-                className="rounded-full bg-violet-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-violet-400"
+                className="rounded-full bg-orange-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-orange-400"
             >
                 앱 설치하기
             </button>

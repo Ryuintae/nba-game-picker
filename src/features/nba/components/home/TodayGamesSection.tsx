@@ -10,8 +10,8 @@ export default function TodayGamesSection({
                                               games,
                                           }: TodayGamesSectionProps) {
     return (
-        <section className="mb-3 overflow-hidden rounded-[24px] border border-black/6 bg-white dark:border-white/10 dark:bg-[#111214]">
-            <div className="flex items-center justify-between border-b border-black/6 px-4 py-3 dark:border-white/10 sm:px-5">
+        <section className="mb-6 overflow-hidden border border-black/10 bg-white dark:border-white/10 dark:bg-[#10141b]">
+            <div className="flex items-center justify-between border-b border-black/8 px-5 py-3 dark:border-white/10">
                 <div>
                     <p className="text-[14px] font-semibold tracking-[-0.02em] text-neutral-900 dark:text-white">
                         오늘 경기
@@ -29,7 +29,7 @@ export default function TodayGamesSection({
                 </Link>
             </div>
 
-            <div className="flex gap-3 overflow-x-auto px-4 py-4 sm:px-5">
+            <div className="flex gap-0 overflow-x-auto bg-black/[0.035] px-0 dark:bg-white/[0.035]">
                 {games.map((game) => (
                     <GameCard key={game.id} game={game} />
                 ))}

@@ -11,8 +11,8 @@ type RecentResultListProps = {
 
 function RecentResultList({ teamName, results }: RecentResultListProps) {
     return (
-        <div className="rounded-[16px] border border-black/6 bg-white p-4 dark:border-white/10 dark:bg-[#1b1e23]">
-            <p className="text-[11px] text-neutral-500 dark:text-neutral-400">
+        <div className="border-t border-black/8 pt-3 dark:border-white/10">
+            <p className="text-[11px] font-medium text-neutral-500 dark:text-neutral-400">
                 {teamName} 최근 3경기
             </p>
             <div className="mt-3 space-y-2">
@@ -42,19 +42,17 @@ function RecentResultList({ teamName, results }: RecentResultListProps) {
 
 export default function RecentResults({ game }: RecentResultsProps) {
     return (
-        <div className="mt-4 rounded-[20px] border border-black/6 bg-[#f8f9fb] p-4 dark:border-white/10 dark:bg-[#17191d]">
-            <div className="flex items-center justify-between">
-                <div>
-                    <p className="text-[13px] font-semibold tracking-[-0.02em] text-neutral-950 dark:text-white">
-                        최근 경기 결과
-                    </p>
-                    <p className="mt-1 text-[11px] text-neutral-500 dark:text-neutral-400">
-                        ESPN 일정 기준 최근 흐름
-                    </p>
-                </div>
+        <div className="mt-5 border border-black/8 bg-[#fbfcfd] p-4 dark:border-white/10 dark:bg-[#17191d]">
+            <div>
+                <p className="text-[13px] font-semibold tracking-[-0.02em] text-neutral-950 dark:text-white">
+                    최근 경기 결과
+                </p>
+                <p className="mt-1 text-[11px] text-neutral-500 dark:text-neutral-400">
+                    ESPN 일정 기준 최근 흐름
+                </p>
             </div>
 
-            <div className="mt-4 grid gap-3 md:grid-cols-2">
+            <div className="mt-4 grid gap-5 md:grid-cols-2">
                 <RecentResultList
                     teamName={game.awayTeam}
                     results={game.recentResults.away}

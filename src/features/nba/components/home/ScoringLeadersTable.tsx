@@ -69,13 +69,13 @@ export default function ScoringLeadersTable({
             className="h-full overflow-hidden"
             contentClassName="flex h-full flex-col p-0"
             action={
-                <span className="rounded-full bg-neutral-100 px-2.5 py-1 text-[11px] font-semibold text-neutral-600 dark:bg-white/10 dark:text-neutral-300">
+                <span className="text-[11px] font-semibold text-neutral-500 dark:text-neutral-400">
                     TOP 10
                 </span>
             }
         >
-            <div className="border-b border-black/6 px-3 py-2.5 dark:border-white/10">
-                <div className="grid grid-cols-3 rounded-full bg-neutral-100 p-1 dark:bg-white/8">
+            <div className="border-b border-black/8 px-3 py-2.5 dark:border-white/10">
+                <div className="grid grid-cols-3 bg-neutral-100 p-1 dark:bg-white/8">
                     {categories.map((category) => {
                         const isActive = category.key === activeCategory?.key;
 
@@ -84,7 +84,7 @@ export default function ScoringLeadersTable({
                                 key={category.key}
                                 type="button"
                                 onClick={() => setActiveKey(category.key)}
-                                className={`min-w-0 rounded-full px-2 py-1.5 text-[12px] font-semibold transition ${
+                                className={`min-w-0 px-2 py-1.5 text-[12px] font-semibold transition ${
                                     isActive
                                         ? "bg-neutral-950 text-white shadow-sm dark:bg-white dark:text-neutral-950"
                                         : "text-neutral-500 hover:text-neutral-950 dark:text-neutral-400 dark:hover:text-white"
@@ -120,6 +120,9 @@ export default function ScoringLeadersTable({
                             <p className="truncate text-[17px] font-semibold tracking-[-0.03em]">
                                 {topPlayer.name}
                             </p>
+                            <p className="mt-1 text-[11px] text-white/55">
+                                {topPlayer.team}
+                            </p>
                         </div>
                         <div className="text-right">
                             <p className="text-[32px] font-semibold tracking-[-0.05em]">
@@ -133,14 +136,14 @@ export default function ScoringLeadersTable({
                 </div>
             ) : null}
 
-            <div className="grid grid-cols-[32px_42px_1fr_58px] border-b border-black/6 bg-[#f7f8fa] px-3 py-2 text-[10px] font-semibold uppercase text-neutral-400 dark:border-white/10 dark:bg-white/[0.03]">
+            <div className="grid grid-cols-[32px_42px_1fr_58px] border-b border-black/8 bg-[#f7f8fa] px-3 py-2 text-[10px] font-semibold uppercase text-neutral-400 dark:border-white/10 dark:bg-white/[0.03]">
                 <span>순위</span>
                 <span />
                 <span>선수</span>
                 <span className="text-right">{activeCategory?.statLabel}</span>
             </div>
 
-            <div className="divide-y divide-black/6 dark:divide-white/10">
+            <div className="divide-y divide-black/8 dark:divide-white/10">
                 {players.map((player) => {
                     const isTopPlayer = player.rank === 1;
 

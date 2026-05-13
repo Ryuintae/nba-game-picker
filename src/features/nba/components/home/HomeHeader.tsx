@@ -11,8 +11,8 @@ const navItems = [
 
 export default function HomeHeader() {
     return (
-        <header className="fixed left-0 top-0 z-50 w-full border-b border-black/6 bg-white/92 backdrop-blur-xl dark:border-white/10 dark:bg-[#0f172a]/88">
-            <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(59,130,246,0.05)_0%,rgba(255,255,255,0)_22%,rgba(249,115,22,0.06)_55%,rgba(244,63,94,0.05)_100%)] dark:bg-[linear-gradient(90deg,rgba(96,165,250,0.08)_0%,rgba(15,23,42,0)_24%,rgba(251,146,60,0.08)_58%,rgba(251,113,133,0.07)_100%)]" />
+        <header className="fixed left-0 top-0 z-50 w-full border-b border-black/8 bg-white/94 backdrop-blur-xl dark:border-white/10 dark:bg-[#0d1320]/94">
+            <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(29,66,138,0.08)_0%,rgba(255,255,255,0)_28%,rgba(249,115,22,0.08)_64%,rgba(200,16,46,0.06)_100%)] dark:bg-[linear-gradient(90deg,rgba(29,66,138,0.22)_0%,rgba(13,19,32,0)_28%,rgba(249,115,22,0.14)_64%,rgba(200,16,46,0.12)_100%)]" />
 
             <div className="relative mx-auto flex w-full max-w-[1800px] flex-col gap-3 px-4 py-3 sm:px-5 lg:h-[84px] lg:flex-row lg:items-center lg:justify-between lg:gap-6 lg:px-6">
                 <div className="flex items-center gap-6 lg:gap-10">
@@ -43,7 +43,7 @@ export default function HomeHeader() {
                                 <li key={item.label}>
                                     <a
                                         href={item.href}
-                                        className="inline-flex items-center border-b-2 border-transparent py-7 text-[14px] font-medium text-neutral-500 transition hover:border-neutral-950 hover:text-neutral-950 dark:text-neutral-400 dark:hover:border-white dark:hover:text-white"
+                                        className="inline-flex items-center border-b-2 border-transparent py-7 text-[14px] font-medium text-neutral-500 transition hover:border-orange-500 hover:text-neutral-950 dark:text-neutral-400 dark:hover:border-orange-400 dark:hover:text-white"
                                     >
                                         {item.label}
                                     </a>
@@ -52,7 +52,7 @@ export default function HomeHeader() {
                             <li>
                                 <Link
                                     href="/about-score"
-                                    className="inline-flex items-center border-b-2 border-transparent py-7 text-[14px] font-medium text-neutral-500 transition hover:border-neutral-950 hover:text-neutral-950 dark:text-neutral-400 dark:hover:border-white dark:hover:text-white"
+                                    className="inline-flex items-center border-b-2 border-transparent py-7 text-[14px] font-medium text-neutral-500 transition hover:border-orange-500 hover:text-neutral-950 dark:text-neutral-400 dark:hover:border-orange-400 dark:hover:text-white"
                                 >
                                     Matchup Score
                                 </Link>
@@ -64,7 +64,7 @@ export default function HomeHeader() {
                 <div className="ml-auto flex items-center gap-2">
                     <Link
                         href="/about-score"
-                        className="inline-flex items-center justify-center rounded-lg border border-black/8 bg-[#fff8f1] px-3 py-2 text-[13px] font-medium text-neutral-900 transition hover:bg-[#ffefdd] dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/10 lg:hidden"
+                        className="inline-flex items-center justify-center rounded-lg border border-black/8 bg-white px-3 py-2 text-[13px] font-medium text-neutral-900 transition hover:bg-orange-50 dark:border-white/10 dark:bg-white/5 dark:text-white dark:hover:bg-white/10 lg:hidden"
                     >
                         Score
                     </Link>

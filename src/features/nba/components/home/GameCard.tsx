@@ -20,10 +20,10 @@ export default function GameCard({ game }: GameCardProps) {
     return (
         <Link
             href={`/games/${game.id}`}
-            className="group min-w-[270px] shrink-0 overflow-hidden rounded-[18px] border border-black/8 bg-white text-neutral-950 transition hover:border-black/16 hover:bg-neutral-50 dark:border-white/10 dark:bg-[#17191d] dark:text-white dark:hover:border-white/16 dark:hover:bg-[#1b1e23] sm:min-w-[292px]"
+            className="group w-[318px] shrink-0 overflow-hidden border-r border-black/8 bg-white text-neutral-950 transition hover:bg-neutral-50 dark:border-white/10 dark:bg-[#151a22] dark:text-white dark:hover:bg-[#1a202a]"
         >
             <div
-                className="h-1.5 bg-[linear-gradient(90deg,var(--away-color)_0%,var(--away-color)_50%,var(--home-color)_50%,var(--home-color)_100%)]"
+                className="h-1 bg-[linear-gradient(90deg,var(--away-color)_0%,var(--away-color)_50%,var(--home-color)_50%,var(--home-color)_100%)]"
                 style={teamBarStyle}
             />
 
@@ -32,7 +32,7 @@ export default function GameCard({ game }: GameCardProps) {
                     <div className="min-w-0">
                         <div className="flex items-center gap-1.5 text-[11px] font-medium text-neutral-500 dark:text-neutral-400">
                             <span>{game.time}</span>
-                            <span className="rounded border border-black/10 px-1.5 py-0.5 text-[10px] leading-none text-neutral-500 dark:border-white/10 dark:text-neutral-400">
+                            <span className="border border-black/10 px-1.5 py-0.5 text-[10px] leading-none text-neutral-500 dark:border-white/10 dark:text-neutral-400">
                             KST
                             </span>
                         </div>
@@ -85,7 +85,7 @@ export default function GameCard({ game }: GameCardProps) {
                     </div>
 
                     <span
-                        className={`inline-flex shrink-0 rounded-full border px-2.5 py-1 text-[12px] font-semibold ${getScoreTone(
+                        className={`inline-flex shrink-0 border px-2.5 py-1 text-[12px] font-semibold ${getScoreTone(
                             game.score
                         )}`}
                     >

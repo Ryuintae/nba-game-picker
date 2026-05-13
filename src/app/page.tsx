@@ -218,19 +218,20 @@ export default async function HomePage() {
     const featuredGame = await getFeaturedGame(todayGames, standings);
 
     return (
-        <main className="relative min-h-screen overflow-x-hidden bg-[#f7f3ea] text-neutral-950 dark:bg-[#0b0f17] dark:text-white">
-            <div className="pointer-events-none absolute inset-0">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(59,130,246,0.07),transparent_26%),radial-gradient(circle_at_top_right,rgba(249,115,22,0.10),transparent_24%),radial-gradient(circle_at_bottom_left,rgba(244,63,94,0.06),transparent_28%)] dark:bg-[radial-gradient(circle_at_top_left,rgba(96,165,250,0.10),transparent_24%),radial-gradient(circle_at_top_right,rgba(251,146,60,0.12),transparent_24%),radial-gradient(circle_at_bottom_left,rgba(251,113,133,0.08),transparent_28%)]" />
+        <main className="relative min-h-screen overflow-x-hidden bg-[#f2f4f7] text-neutral-950 dark:bg-[#080b12] dark:text-white">
+            <div className="pointer-events-none absolute inset-0 opacity-[0.045] dark:opacity-[0.055]">
+                <div className="absolute inset-0 [background-image:linear-gradient(90deg,rgba(29,66,138,0.9)_1px,transparent_1px),linear-gradient(rgba(249,115,22,0.7)_1px,transparent_1px)] [background-size:72px_72px] dark:[background-image:linear-gradient(90deg,rgba(255,255,255,0.7)_1px,transparent_1px),linear-gradient(rgba(255,255,255,0.7)_1px,transparent_1px)]" />
+                <div className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-[#1d428a] dark:bg-white" />
+                <div className="absolute left-1/2 top-[170px] h-[460px] w-[460px] -translate-x-1/2 rounded-full border border-[#f97316] dark:border-white" />
             </div>
-
             <HomeHeader />
 
-            <div className="relative mx-auto w-full max-w-[1800px] px-3 pb-6 pt-[128px] sm:px-4 lg:px-6 lg:pt-[96px]">
+            <div className="relative w-full px-3 pb-6 pt-[128px] sm:px-4 lg:px-6 lg:pt-[96px]">
                 <section id="today-games">
                     <TodayGamesSection games={homeGames} />
                 </section>
 
-                <section className="grid gap-3 xl:grid-cols-[minmax(0,1.4fr)_minmax(380px,0.6fr)] xl:items-stretch">
+                <section className="grid gap-6 xl:grid-cols-[minmax(0,1.55fr)_minmax(360px,0.7fr)] xl:items-start">
                     <div id="featured-game" className="h-full">
                         {featuredGame ? (
                             <FeaturedGameSection game={featuredGame} />
@@ -253,7 +254,7 @@ export default async function HomePage() {
                     </aside>
                 </section>
 
-                <section id="rankings" className="mt-3">
+                <section id="rankings" className="mt-6">
                     <RankingTable teams={standings} />
                 </section>
             </div>
