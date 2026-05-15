@@ -1,3 +1,7 @@
+﻿import Link from "next/link";
+
+import Image from "next/image";
+
 import HomeHeader from "@/features/nba/components/home/HomeHeader";
 import TodayGamesSection from "@/features/nba/components/home/TodayGamesSection";
 import FeaturedGameSection from "@/features/nba/components/home/FeaturedGameSection";
@@ -161,10 +165,10 @@ function formatMatchupReason(
     homeRanking: TeamRanking | undefined
 ): string {
     if (!awayRanking || !homeRanking) {
-        return "현재 경기 정보와 Matchup Score를 기준으로 선정된 추천 경기입니다.";
+        return "?꾩옱 寃쎄린 ?뺣낫? Matchup Score瑜?湲곗??쇰줈 ?좎젙??異붿쿇 寃쎄린?낅땲??";
     }
 
-    return `${awayRanking.team}(${awayRanking.record})와 ${homeRanking.team}(${homeRanking.record})의 시즌 지표를 함께 비교해 선정한 추천 경기입니다.`;
+    return `${awayRanking.team}(${awayRanking.record})? ${homeRanking.team}(${homeRanking.record})???쒖쫵 吏?쒕? ?④퍡 鍮꾧탳???좎젙??異붿쿇 寃쎄린?낅땲??`;
 }
 
 function pickFeaturedGame(games: GameListItem[]): GameListItem | null {
@@ -245,7 +249,7 @@ async function mapGameListItemToFeaturedGame(
         awayRecord: awayRanking?.record ?? game.awayTeam.record ?? "-",
         homeRecord: homeRanking?.record ?? game.homeTeam.record ?? "-",
         score: game.matchupScore,
-        streak: "오늘의 추천 경기",
+        streak: "?ㅻ뒛??異붿쿇 寃쎄린",
         reason: formatMatchupReason(awayRanking, homeRanking),
         stats: {
             awayLast5: awayRanking?.lastTen ?? "-",
@@ -339,6 +343,25 @@ export default async function HomePage({ searchParams }: HomePageProps) {
             <HomeHeader />
 
             <div className="relative w-full px-3 pb-6 pt-[128px] sm:px-4 lg:px-6 lg:pt-[96px]">
+                {shouldShowDemoPreview ? (
+                    <div className="mb-3 flex flex-wrap items-center justify-between gap-3 border border-black/10 bg-white px-5 py-3 dark:border-white/10 dark:bg-[#10141b]">
+                        <div>
+                            <p className="text-[13px] font-semibold text-neutral-950 dark:text-white">
+                                데모 화면을 보고 있습니다.
+                            </p>
+                            <p className="mt-1 text-[11px] text-neutral-500 dark:text-neutral-400">
+                                실제 일정이 없는 날의 홈 화면 구성을 미리 보여주는 모드입니다.
+                            </p>
+                        </div>
+                        <Link
+                            href="/"
+                            className="inline-flex items-center justify-center border border-black/10 px-4 py-2 text-[13px] font-semibold text-neutral-900 transition hover:bg-black/5 dark:border-white/10 dark:text-white dark:hover:bg-white/5"
+                        >
+                            실제 화면으로 돌아가기
+                        </Link>
+                    </div>
+                ) : null}
+
                 <section id="today-games">
                     <TodayGamesSection games={homeGames} />
                 </section>
@@ -348,13 +371,74 @@ export default async function HomePage({ searchParams }: HomePageProps) {
                         {featuredGame ? (
                             <FeaturedGameSection game={featuredGame} />
                         ) : (
-                            <div className="rounded-3xl border border-dashed border-neutral-300 bg-white/60 p-8 text-center dark:border-white/10 dark:bg-white/5">
-                                <h2 className="text-lg font-semibold">
-                                    추천 경기가 없습니다
-                                </h2>
-                                <p className="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
-                                    오늘 표시할 NBA 경기가 없어 추천 경기를 계산할 수 없습니다.
-                                </p>
+                            <div className="h-full overflow-hidden border border-black/10 bg-white dark:border-white/10 dark:bg-[#10141b]">
+                                <div className="border-b border-black/8 px-5 py-3 dark:border-white/10">
+                                    <p className="text-[14px] font-semibold tracking-[-0.02em] text-neutral-900 dark:text-white">오늘의 추천 경기</p>
+                                    <p className="text-[11px] text-neutral-500 dark:text-neutral-400">경기 없는 날에는 데모 화면으로 홈 구성을 확인해보세요</p>
+                                </div>
+
+                                <div className="grid gap-0 lg:grid-cols-[minmax(0,1fr)_360px]">
+                                    <div className="p-5 sm:p-6">
+                                        <p className="text-[24px] font-semibold tracking-[-0.04em] text-neutral-950 dark:text-white">오늘 예정된 NBA 경기가 없습니다.</p>
+                                        <p className="mt-3 max-w-2xl text-[14px] leading-7 text-neutral-600 dark:text-neutral-300">경기가 없는 날에는 실제 일정 대신 데모 화면으로 홈 구성을 미리 볼 수 있습니다. 아래 예시 매치업을 눌러 전체 홈 데모를 확인해보세요.</p>
+
+                                        <div className="mt-6 overflow-hidden border border-black/8 bg-[#f8f9fb] dark:border-white/10 dark:bg-white/[0.04]">
+                                            <div className="relative min-h-[260px] overflow-hidden p-5 sm:p-6">
+                                                <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(29,66,138,0.10),transparent_42%),linear-gradient(315deg,rgba(85,37,131,0.16),transparent_48%)] dark:bg-[linear-gradient(135deg,rgba(29,66,138,0.26),transparent_42%),linear-gradient(315deg,rgba(85,37,131,0.30),transparent_48%)]" />
+                                                <div className="absolute inset-x-6 top-6 bottom-6 border-2 border-white/70 dark:border-white/10" />
+                                                <div className="absolute left-1/2 top-6 bottom-6 w-px -translate-x-1/2 bg-white/70 dark:bg-white/10" />
+                                                <div className="absolute left-1/2 top-1/2 h-28 w-28 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white/70 dark:border-white/10" />
+
+                                                <div className="relative flex items-center justify-between gap-5">
+                                                    <div className="min-w-0">
+                                                        <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-neutral-500 dark:text-neutral-400">Demo Matchup</p>
+                                                        <h3 className="mt-3 text-[30px] font-semibold leading-none tracking-[-0.06em] text-neutral-950 dark:text-white">Warriors<br />Lakers</h3>
+                                                    </div>
+                                                    <div className="flex items-center gap-4">
+                                                        <div className="relative h-20 w-20 shrink-0">
+                                                            <Image
+                                                                src="https://a.espncdn.com/i/teamlogos/nba/500/gs.png"
+                                                                alt="Golden State Warriors logo"
+                                                                width={80}
+                                                                height={80}
+                                                                className="h-full w-full object-contain"
+                                                            />
+                                                        </div>
+                                                        <span className="text-[12px] font-semibold text-neutral-400 dark:text-neutral-500">VS</span>
+                                                        <div className="relative h-20 w-20 shrink-0">
+                                                            <Image
+                                                                src="https://a.espncdn.com/i/teamlogos/nba/500/lal.png"
+                                                                alt="Los Angeles Lakers logo"
+                                                                width={80}
+                                                                height={80}
+                                                                className="h-full w-full object-contain"
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className="relative mt-8 grid gap-3 sm:grid-cols-3">
+                                                    <div className="bg-white/80 p-3 backdrop-blur-sm dark:bg-black/25"><p className="text-[10px] font-semibold uppercase text-neutral-500 dark:text-neutral-400">Main Card</p><p className="mt-1 text-[13px] font-semibold text-neutral-950 dark:text-white">추천 경기</p></div>
+                                                    <div className="bg-white/80 p-3 backdrop-blur-sm dark:bg-black/25"><p className="text-[10px] font-semibold uppercase text-neutral-500 dark:text-neutral-400">Leaders</p><p className="mt-1 text-[13px] font-semibold text-neutral-950 dark:text-white">선수 리더</p></div>
+                                                    <div className="bg-white/80 p-3 backdrop-blur-sm dark:bg-black/25"><p className="text-[10px] font-semibold uppercase text-neutral-500 dark:text-neutral-400">Tables</p><p className="mt-1 text-[13px] font-semibold text-neutral-950 dark:text-white">팀 순위</p></div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="mt-6 flex flex-wrap gap-2">
+                                            <Link href="/?preview=demo" className="inline-flex items-center justify-center bg-neutral-950 px-4 py-2.5 text-[13px] font-semibold text-white transition hover:bg-neutral-800 dark:bg-white dark:text-neutral-950 dark:hover:bg-neutral-200">데모 화면 보기</Link>
+                                            <Link href="/games" className="inline-flex items-center justify-center border border-black/10 px-4 py-2.5 text-[13px] font-medium text-neutral-900 transition hover:bg-black/5 dark:border-white/10 dark:text-white dark:hover:bg-white/5">전체 경기 일정 보기</Link>
+                                        </div>
+                                    </div>
+                                    <div className="border-t border-black/8 bg-[#f8f9fb] p-5 dark:border-white/10 dark:bg-white/[0.04] lg:border-l lg:border-t-0">
+                                        <div className="flex items-center justify-between gap-3"><p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-neutral-500 dark:text-neutral-400">Demo Preview</p><span className="border border-black/10 px-2 py-1 text-[10px] font-semibold text-neutral-500 dark:border-white/10 dark:text-neutral-400">예시</span></div>
+                                        <div className="mt-4 space-y-2">
+                                            {[["11:00", "GSW", "LAL", "96"], ["09:30", "BOS", "NYK", "88"], ["10:00", "DEN", "PHX", "84"]].map(([time, away, home, score]) => (
+                                                <div key={`${away}-${home}`} className="grid grid-cols-[52px_1fr_auto] items-center gap-3 border border-black/8 bg-white px-3 py-2.5 dark:border-white/10 dark:bg-[#151a22]"><span className="text-[11px] font-medium text-neutral-500 dark:text-neutral-400">{time}</span><div className="min-w-0"><p className="truncate text-[13px] font-semibold text-neutral-950 dark:text-white">{away} at {home}</p><p className="mt-0.5 text-[10px] text-neutral-500 dark:text-neutral-400">Matchup Score</p></div><span className="text-[14px] font-semibold tabular-nums text-neutral-950 dark:text-white">{score}</span></div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         )}
                     </div>
@@ -373,3 +457,6 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         </main>
     );
 }
+
+
+
