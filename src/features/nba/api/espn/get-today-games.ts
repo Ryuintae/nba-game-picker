@@ -195,5 +195,5 @@ export async function getEspnTodayGames(
         return formatDateToKoreaYYYYMMDD(new Date(game.date)) === targetKoreaDate;
     });
 
-    return todayGames.length > 0 ? todayGames : games;
+    return todayGames;
 }
