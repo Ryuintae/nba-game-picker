@@ -2,12 +2,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import MatchupStatsChart from "@/app/games/[gameId]/MatchupStatsChart";
 import HomeHeader from "@/features/nba/components/home/HomeHeader";
 import { getEspnGameSummary } from "@/features/nba/api/espn/get-game-summary";
 import { gameDetailMap } from "@/features/nba/data/games/game-detail";
 import { getScoreTone } from "@/features/nba/lib/score";
-import type { FeaturedGame } from "@/features/nba/types/home";
 import type { GameTeam } from "@/features/nba/types/game";
+import type { FeaturedGame } from "@/features/nba/types/home";
 
 type GameDetailPageProps = {
     params: Promise<{
@@ -262,6 +263,18 @@ export default async function GameDetailPage({ params }: GameDetailPageProps) {
                                     homeTeam={game.homeTeam}
                                 />
                             </div>
+
+                            <MatchupStatsChart
+                                awayTeamLabel={
+                                    game.awayTeam.abbreviation ??
+                                    game.awayTeam.displayName
+                                }
+                                homeTeamLabel={
+                                    game.homeTeam.abbreviation ??
+                                    game.homeTeam.displayName
+                                }
+                                stats={game.stats}
+                            />
                         </div>
 
                         <aside className="border-t border-black/8 bg-[#f8f9fb] p-5 dark:border-white/10 dark:bg-white/[0.04] lg:border-l lg:border-t-0">
