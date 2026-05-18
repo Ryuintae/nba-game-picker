@@ -3,10 +3,10 @@ import InstallPrompt from "@/components/InstallPrompt";
 import ThemeToggle from "@/components/ThemeToggle";
 
 const navItems = [
-    { label: "오늘 경기", href: "#today-games" },
-    { label: "추천 경기", href: "#featured-game" },
-    { label: "팀 순위", href: "#rankings" },
-    { label: "선수 리더", href: "#leaders" },
+    { label: "오늘 경기", href: "/#today-games" },
+    { label: "추천 경기", href: "/#featured-game" },
+    { label: "팀 순위", href: "/#rankings" },
+    { label: "선수 리더", href: "/#leaders" },
 ];
 
 export default function HomeHeader() {

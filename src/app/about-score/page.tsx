@@ -1,4 +1,5 @@
 import Link from "next/link";
+import HomeHeader from "@/features/nba/components/home/HomeHeader";
 
 const scoreFactors = [
     {
@@ -62,36 +63,10 @@ const totalScore = sampleBreakdown.reduce((sum, item) => sum + item.score, 0);
 
 export default function AboutScorePage() {
     return (
-        <main className="min-h-screen bg-[#f6f1e7] text-neutral-950 dark:bg-[#0b0f17] dark:text-white">
-            <div className="mx-auto w-full max-w-[1360px] px-3 pb-8 pt-3 sm:px-4 lg:px-5">
-                <header className="mb-3 rounded-[24px] border border-black/6 bg-white/95 px-4 py-4 backdrop-blur-xl dark:border-white/10 dark:bg-[#111827]/90 sm:px-5">
-                    <div className="flex items-center justify-between gap-3">
-                        <div className="min-w-0">
-                            <p className="text-[18px] font-semibold tracking-[-0.03em] text-neutral-950 dark:text-white">
-                                About Matchup Score
-                            </p>
-                            <p className="mt-1 text-[12px] text-neutral-500 dark:text-neutral-400">
-                                코트 위에서 보듯이 추천 점수 구조를 한눈에 설명합니다.
-                            </p>
-                        </div>
+        <main className="relative min-h-screen overflow-x-hidden bg-[#f6f1e7] text-neutral-950 [line-break:strict] [overflow-wrap:break-word] [text-wrap:pretty] [word-break:keep-all] dark:bg-[#0b0f17] dark:text-white">
+            <HomeHeader />
 
-                        <div className="flex shrink-0 items-center gap-2">
-                            <Link
-                                href="/"
-                                className="inline-flex items-center justify-center rounded-full border border-black/10 px-4 py-2 text-[13px] font-medium text-neutral-900 transition hover:bg-black/5 dark:border-white/10 dark:text-white dark:hover:bg-white/5"
-                            >
-                                홈으로
-                            </Link>
-                            <Link
-                                href="/games"
-                                className="inline-flex items-center justify-center rounded-full border border-black/10 px-4 py-2 text-[13px] font-medium text-neutral-900 transition hover:bg-black/5 dark:border-white/10 dark:text-white dark:hover:bg-white/5"
-                            >
-                                경기 목록
-                            </Link>
-                        </div>
-                    </div>
-                </header>
-
+            <div className="mx-auto w-full max-w-[1360px] px-3 pb-8 pt-[128px] sm:px-4 lg:px-5 lg:pt-[96px]">
                 <section className="relative mb-3 overflow-hidden rounded-[30px] border border-[#d8c3a5] bg-[linear-gradient(180deg,#f3d6ad_0%,#ecc28e_100%)] dark:border-white/10 dark:bg-[linear-gradient(180deg,#14213d_0%,#0b1220_100%)]">
                     <div className="absolute inset-0 opacity-40 dark:opacity-20">
                         <div className="absolute inset-x-[7%] top-[10%] bottom-[10%] rounded-[30px] border-2 border-white/60 dark:border-white/25" />
@@ -113,14 +88,14 @@ export default function AboutScorePage() {
                                 <p className="text-[12px] font-semibold uppercase tracking-[0.22em] text-neutral-700/60 dark:text-white/50">
                                     Court View
                                 </p>
-                                <h1 className="mt-3 text-[30px] font-semibold tracking-[-0.05em] text-neutral-950 dark:text-white sm:text-[42px]">
+                                <h1 className="mt-3 text-[30px] font-semibold tracking-[-0.05em] text-neutral-950 [text-wrap:balance] dark:text-white sm:text-[42px]">
                                     Matchup Score를
                                     <br />
                                     농구 코트 위에서 해석하는 방식
                                 </h1>
                                 <p className="mt-4 max-w-2xl text-[14px] leading-7 text-neutral-800/80 dark:text-white/75 sm:text-[15px]">
                                     이 페이지는 경기 추천 점수를 설명하기 위한 보조 페이지입니다.
-                                    코트 위에서 어떤 요소가 재미를 만드는지 보듯이, 접전 가능성,
+                                    코트 위에서 어떤 요소가 재미를 만드는지 접전 가능성,
                                     득점 기대치, 최근 분위기를 중심으로 점수 구조를 빠르게 이해할
                                     수 있게 설계했습니다.
                                 </p>
@@ -187,7 +162,7 @@ export default function AboutScorePage() {
                             <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-neutral-400 dark:text-neutral-500">
                                 On Court Factors
                             </p>
-                            <h2 className="mt-2 text-[26px] font-semibold tracking-[-0.04em] text-neutral-950 dark:text-white">
+                            <h2 className="mt-2 text-[26px] font-semibold tracking-[-0.04em] text-neutral-950 [text-wrap:balance] dark:text-white">
                                 코트 위 3가지 핵심 요소
                             </h2>
                         </div>
@@ -209,7 +184,7 @@ export default function AboutScorePage() {
                                             <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-neutral-400 dark:text-neutral-500">
                                                 {factor.subtitle}
                                             </p>
-                                            <h3 className="mt-2 text-[24px] font-semibold tracking-[-0.04em] text-neutral-950 dark:text-white">
+                                            <h3 className="mt-2 text-[24px] font-semibold tracking-[-0.04em] text-neutral-950 [text-wrap:balance] dark:text-white">
                                                 {factor.title}
                                             </h3>
                                         </div>
@@ -248,7 +223,7 @@ export default function AboutScorePage() {
                             <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-neutral-400 dark:text-neutral-500">
                                 Reading Guide
                             </p>
-                            <h2 className="mt-2 text-[24px] font-semibold tracking-[-0.04em] text-neutral-950 dark:text-white">
+                            <h2 className="mt-2 text-[24px] font-semibold tracking-[-0.04em] text-neutral-950 [text-wrap:balance] dark:text-white">
                                 점수 해석 기준
                             </h2>
 
@@ -278,7 +253,7 @@ export default function AboutScorePage() {
                                 <p className="text-[11px] uppercase tracking-[0.16em] text-neutral-400 dark:text-neutral-500">
                                     Quick Read
                                 </p>
-                                <p className="mt-2 text-[15px] font-semibold tracking-[-0.02em] text-neutral-950 dark:text-white">
+                                <p className="mt-2 text-[15px] font-semibold tracking-[-0.02em] text-neutral-950 [text-wrap:balance] dark:text-white">
                                     숫자가 높을수록 “먼저 볼 만한 경기”에 가깝다
                                 </p>
                                 <p className="mt-2 text-[13px] leading-6 text-neutral-600 dark:text-neutral-300">
@@ -295,7 +270,7 @@ export default function AboutScorePage() {
                                 <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-neutral-400 dark:text-neutral-500">
                                     Example Matchup
                                 </p>
-                                <h2 className="mt-2 text-[26px] font-semibold tracking-[-0.04em] text-neutral-950 dark:text-white">
+                                <h2 className="mt-2 text-[26px] font-semibold tracking-[-0.04em] text-neutral-950 [text-wrap:balance] dark:text-white">
                                     샘플 경기 분석 패널
                                 </h2>
                             </div>
@@ -348,13 +323,13 @@ export default function AboutScorePage() {
                             <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-neutral-400 dark:text-neutral-500">
                                 Why It Matters
                             </p>
-                            <h2 className="mt-2 text-[26px] font-semibold tracking-[-0.04em] text-neutral-950 dark:text-white">
+                            <h2 className="mt-2 text-[26px] font-semibold tracking-[-0.04em] text-neutral-950 [text-wrap:balance] dark:text-white">
                                 왜 이 페이지가 필요한가?
                             </h2>
                             <p className="mt-4 max-w-3xl text-[14px] leading-7 text-neutral-700 dark:text-neutral-300">
                                 일정 서비스는 보통 경기 시간을 보여주는 데서 끝납니다. 하지만
                                 실제 사용자는 “오늘 어떤 경기를 먼저 보면 좋을까?”를 더
-                                궁금해합니다. 이 페이지는 추천 점수를 단순 숫자가 아니라 선택을
+                                궁금해 합니다. 이 페이지는 추천 점수를 단순 숫자가 아니라 선택을
                                 돕는 기준으로 이해하게 만들고, 프로젝트의 추천 로직을 더 명확히
                                 설명하는 역할을 합니다.
                             </p>
