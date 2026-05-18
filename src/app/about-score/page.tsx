@@ -63,11 +63,11 @@ const totalScore = sampleBreakdown.reduce((sum, item) => sum + item.score, 0);
 
 export default function AboutScorePage() {
     return (
-        <main className="relative min-h-screen overflow-x-hidden bg-[#f6f1e7] text-neutral-950 [line-break:strict] [overflow-wrap:break-word] [text-wrap:pretty] [word-break:keep-all] dark:bg-[#0b0f17] dark:text-white">
+        <main className="relative min-h-screen overflow-x-hidden bg-[#f2f4f7] text-neutral-950 [line-break:strict] [overflow-wrap:break-word] [text-wrap:pretty] [word-break:keep-all] dark:bg-[#080b12] dark:text-white">
             <HomeHeader />
 
-            <div className="mx-auto w-full max-w-[1360px] px-3 pb-8 pt-[128px] sm:px-4 lg:px-5 lg:pt-[96px]">
-                <section className="relative mb-3 overflow-hidden rounded-[30px] border border-[#d8c3a5] bg-[linear-gradient(180deg,#f3d6ad_0%,#ecc28e_100%)] dark:border-white/10 dark:bg-[linear-gradient(180deg,#14213d_0%,#0b1220_100%)]">
+            <div className="relative w-full px-3 pb-8 pt-[128px] sm:px-4 lg:px-6 lg:pt-[96px]">
+                <section className="relative mb-3 overflow-hidden rounded-[30px] border border-black/10 bg-[linear-gradient(180deg,#f6d7aa_0%,#f0c48e_100%)] dark:border-white/10 dark:bg-[linear-gradient(180deg,#14213d_0%,#0b1220_100%)]">
                     <div className="absolute inset-0 opacity-40 dark:opacity-20">
                         <div className="absolute inset-x-[7%] top-[10%] bottom-[10%] rounded-[30px] border-2 border-white/60 dark:border-white/25" />
                         <div className="absolute left-1/2 top-[10%] bottom-[10%] w-[2px] -translate-x-1/2 bg-white/60 dark:bg-white/25" />
