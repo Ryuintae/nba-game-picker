@@ -165,10 +165,10 @@ function formatMatchupReason(
     homeRanking: TeamRanking | undefined
 ): string {
     if (!awayRanking || !homeRanking) {
-        return "?꾩옱 寃쎄린 ?뺣낫? Matchup Score瑜?湲곗??쇰줈 ?좎젙??異붿쿇 寃쎄린?낅땲??";
+        return "현재 경기 정보와 Matchup Score를 기준으로 선정된 추천 경기입니다.";
     }
 
-    return `${awayRanking.team}(${awayRanking.record})? ${homeRanking.team}(${homeRanking.record})???쒖쫵 吏?쒕? ?④퍡 鍮꾧탳???좎젙??異붿쿇 寃쎄린?낅땲??`;
+    return `${awayRanking.team}(${awayRanking.record})와 ${homeRanking.team}(${homeRanking.record})의 시즌 지표를 함께 비교해 선정한 추천 경기입니다.`;
 }
 
 function pickFeaturedGame(games: GameListItem[]): GameListItem | null {
@@ -249,7 +249,7 @@ async function mapGameListItemToFeaturedGame(
         awayRecord: awayRanking?.record ?? game.awayTeam.record ?? "-",
         homeRecord: homeRanking?.record ?? game.homeTeam.record ?? "-",
         score: game.matchupScore,
-        streak: "?ㅻ뒛??異붿쿇 寃쎄린",
+        streak: "오늘의 추천 경기",
         reason: formatMatchupReason(awayRanking, homeRanking),
         stats: {
             awayLast5: awayRanking?.lastTen ?? "-",

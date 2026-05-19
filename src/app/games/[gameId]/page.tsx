@@ -4,11 +4,13 @@ import { notFound } from "next/navigation";
 
 import MatchupStatsChart from "@/app/games/[gameId]/MatchupStatsChart";
 import HomeHeader from "@/features/nba/components/home/HomeHeader";
+import { getApiSportsGameById } from "@/features/nba/api/api-sports/get-game-by-id";
 import { getEspnGameSummary } from "@/features/nba/api/espn/get-game-summary";
+import { getTeamStandings } from "@/features/nba/api/espn/get-team-standings";
 import { gameDetailMap } from "@/features/nba/data/games/game-detail";
 import { getScoreTone } from "@/features/nba/lib/score";
-import type { GameTeam } from "@/features/nba/types/game";
-import type { FeaturedGame } from "@/features/nba/types/home";
+import type { GameListItem, GameTeam } from "@/features/nba/types/game";
+import type { FeaturedGame, TeamRanking } from "@/features/nba/types/home";
 
 type GameDetailPageProps = {
     params: Promise<{
@@ -74,31 +76,109 @@ function mapFeaturedGameToDetailGame(game: FeaturedGame): DetailGame {
     };
 }
 
-async function getGameDetail(gameId: string): Promise<DetailGame | null> {
-    if (gameId.startsWith("espn-")) {
-        const espnGame = await getEspnGameSummary(gameId);
+function mapGameListItemToDetailGame(game: GameListItem): DetailGame {
+    return {
+        id: game.id,
+        time: game.startTime,
+        statusText: game.statusText,
+        awayTeam: game.awayTeam,
+        homeTeam: game.homeTeam,
+        matchupScore: game.matchupScore,
+        reason: "API-SPORTS 경기 정보를 기준으로 상세 정보를 구성했습니다.",
+        broadcasts: [],
+        stats: {
+            awayLastTen: "-",
+            homeLastTen: "-",
+            awayPpg: "-",
+            homePpg: "-",
+            awayOppPpg: "-",
+            homeOppPpg: "-",
+        },
+    };
+}
 
-        if (espnGame) {
-            return {
+function findTeamRanking(
+    standings: TeamRanking[],
+    team: GameTeam
+): TeamRanking | undefined {
+    const abbreviation = team.abbreviation?.toLowerCase();
+    const displayName = team.displayName.toLowerCase();
+
+    return standings.find((ranking) => {
+        return (
+            ranking.abbreviation?.toLowerCase() === abbreviation ||
+            ranking.team.toLowerCase() === displayName
+        );
+    });
+}
+
+function withStandingStats(
+    game: DetailGame,
+    standings: TeamRanking[]
+): DetailGame {
+    const awayRanking = findTeamRanking(standings, game.awayTeam);
+    const homeRanking = findTeamRanking(standings, game.homeTeam);
+
+    return {
+        ...game,
+        awayTeam: {
+            ...game.awayTeam,
+            record: awayRanking?.record ?? game.awayTeam.record,
+        },
+        homeTeam: {
+            ...game.homeTeam,
+            record: homeRanking?.record ?? game.homeTeam.record,
+        },
+        stats: {
+            awayLastTen: awayRanking?.lastTen ?? game.stats.awayLastTen,
+            homeLastTen: homeRanking?.lastTen ?? game.stats.homeLastTen,
+            awayPpg: awayRanking?.avgPointsFor ?? game.stats.awayPpg,
+            homePpg: homeRanking?.avgPointsFor ?? game.stats.homePpg,
+            awayOppPpg:
+                awayRanking?.avgPointsAgainst ?? game.stats.awayOppPpg,
+            homeOppPpg:
+                homeRanking?.avgPointsAgainst ?? game.stats.homeOppPpg,
+        },
+    };
+}
+
+async function getGameDetail(gameId: string): Promise<DetailGame | null> {
+    const standings = await getTeamStandings().catch(() => []);
+    const espnGame = await getEspnGameSummary(gameId).catch(() => null);
+
+    if (espnGame) {
+        return withStandingStats(
+            {
                 id: espnGame.id,
                 time: espnGame.time,
                 statusText: espnGame.statusText,
                 awayTeam: espnGame.awayTeam,
                 homeTeam: espnGame.homeTeam,
                 matchupScore: espnGame.matchupScore,
-                reason:
-                    "ESPN 경기 데이터와 팀 시즌 지표를 바탕으로 상세 정보를 구성했습니다.",
+                reason: "ESPN 경기 데이터와 시즌 지표를 바탕으로 상세 정보를 구성했습니다.",
                 note: espnGame.note,
                 venue: espnGame.venue,
                 broadcasts: espnGame.broadcasts,
                 stats: espnGame.stats,
-            };
-        }
+            },
+            standings
+        );
+    }
+
+    const apiSportsGame = await getApiSportsGameById(gameId).catch(() => null);
+
+    if (apiSportsGame) {
+        return withStandingStats(
+            mapGameListItemToDetailGame(apiSportsGame),
+            standings
+        );
     }
 
     const fallbackGame = gameDetailMap[gameId];
 
-    return fallbackGame ? mapFeaturedGameToDetailGame(fallbackGame) : null;
+    return fallbackGame
+        ? withStandingStats(mapFeaturedGameToDetailGame(fallbackGame), standings)
+        : null;
 }
 
 function TeamBlock({
@@ -289,8 +369,7 @@ export default async function GameDetailPage({ params }: GameDetailPageProps) {
                                 {game.matchupScore}
                             </p>
                             <p className="mt-3 text-[12px] leading-5 text-neutral-500 dark:text-neutral-400">
-                                실시간 점수와 경기 상태를 기준으로 추천 우선순위를
-                                계산합니다.
+                                실시간 점수와 경기 상태를 기준으로 추천 우선순위를 계산합니다.
                             </p>
 
                             <div className="mt-6 space-y-3 border-t border-black/8 pt-4 text-[13px] dark:border-white/10">
