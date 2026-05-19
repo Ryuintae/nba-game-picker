@@ -1,12 +1,16 @@
 import { GamesList } from "@/features/nba/components/games/GamesList";
 import { getTodayGamesWithArtwork } from "@/features/nba/api/get-today-games-with-artwork";
+import { waitForRouteLoadingAnimation } from "@/features/nba/lib/route-loading";
 import type { GameListItem } from "@/features/nba/types/game";
 
 export default async function GamesPage() {
     let games: GameListItem[] = [];
 
     try {
-        games = await getTodayGamesWithArtwork();
+        [games] = await Promise.all([
+            getTodayGamesWithArtwork(),
+            waitForRouteLoadingAnimation(),
+        ]);
     } catch (error) {
         console.error("Failed to fetch NBA games:", error);
     }

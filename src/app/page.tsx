@@ -17,6 +17,7 @@ import { getTeamStandings } from "@/features/nba/api/espn/get-team-standings";
 import { getTodayGamesWithArtwork } from "@/features/nba/api/get-today-games-with-artwork";
 import { playerLeaderCategories } from "@/features/nba/data/home/scoring-leaders";
 import { teamRankings } from "@/features/nba/data/home/team-rankings";
+import { waitForRouteLoadingAnimation } from "@/features/nba/lib/route-loading";
 
 import type { GameListItem } from "@/features/nba/types/game";
 import type {
@@ -291,12 +292,16 @@ export default async function HomePage({ searchParams }: HomePageProps) {
     let standings: TeamRanking[] = teamRankings;
     let leaderCategories: PlayerLeaderCategory[] = playerLeaderCategories;
 
-    const [todayGamesResult, standingsResult, leadersResult] =
-        await Promise.allSettled([
+    const [fetchResults] = await Promise.all([
+        Promise.allSettled([
             getTodayGamesWithArtwork(),
             getTeamStandings(),
             getPlayerLeaderCategories(),
-        ]);
+        ]),
+        waitForRouteLoadingAnimation(),
+    ]);
+
+    const [todayGamesResult, standingsResult, leadersResult] = fetchResults;
 
     if (todayGamesResult.status === "fulfilled") {
         todayGames = todayGamesResult.value;

@@ -8,6 +8,7 @@ import { getApiSportsGameById } from "@/features/nba/api/api-sports/get-game-by-
 import { getEspnGameSummary } from "@/features/nba/api/espn/get-game-summary";
 import { getTeamStandings } from "@/features/nba/api/espn/get-team-standings";
 import { gameDetailMap } from "@/features/nba/data/games/game-detail";
+import { waitForRouteLoadingAnimation } from "@/features/nba/lib/route-loading";
 import { getScoreTone } from "@/features/nba/lib/score";
 import type { GameListItem, GameTeam } from "@/features/nba/types/game";
 import type { FeaturedGame, TeamRanking } from "@/features/nba/types/home";
@@ -266,7 +267,10 @@ function StatCompare({
 
 export default async function GameDetailPage({ params }: GameDetailPageProps) {
     const { gameId } = await params;
-    const game = await getGameDetail(gameId);
+    const [game] = await Promise.all([
+        getGameDetail(gameId),
+        waitForRouteLoadingAnimation(),
+    ]);
 
     if (!game) {
         notFound();
